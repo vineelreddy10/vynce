@@ -122,6 +122,18 @@ def create_test_room(name: str = "Test Room"):
                 "body": f"Welcome to {name}! 👋",
             })
 
+        # Create Matrix Room record
+        try:
+            frappe.get_doc({
+                "doctype": "Matrix Room",
+                "room_id": room_id,
+                "name": name,
+                "member_count": 2,
+            }).insert(ignore_permissions=True)
+            frappe.db.commit()
+        except Exception:
+            pass
+
         return {
             "room_id": room_id,
             "name": name,
@@ -162,12 +174,34 @@ def _do_list_rooms(token: str | None):
         joins = sync.get("rooms", {}).get("join", {})
         result = []
         for room_id, room_data in joins.items():
+            # Extract room name from state or timeline events
+            name = room_id
+            all_events = (room_data.get("state", {}).get("events", [])
+                        + room_data.get("timeline", {}).get("events", []))
+            for event in all_events:
+                if event.get("type") == "m.room.name" and event.get("content", {}).get("name"):
+                    name = event["content"]["name"]
+                    break
+
+            # Extract member count from summary or count from events
+            summary = room_data.get("summary", {})
+            member_count = summary.get("m.joined_member_count", 0)
+            if not member_count:
+                # Fallback: count join events in timeline
+                member_count = sum(
+                    1 for e in all_events
+                    if e.get("type") == "m.room.member"
+                    and e.get("content", {}).get("membership") == "join"
+                )
+
+            # Last message from timeline
             timeline = room_data.get("timeline", {}).get("events", [])
             last_event = timeline[-1] if timeline else {}
+
             result.append({
                 "room_id": room_id,
-                "name": room_id,
-                "member_count": 0,
+                "name": name,
+                "member_count": member_count,
                 "state": "joined",
                 "last_message": last_event.get("content", {}).get("body", ""),
             })
