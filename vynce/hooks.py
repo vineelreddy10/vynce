@@ -86,7 +86,7 @@ app_license = "mit"
 # ------------
 
 # before_install = "vynce.install.before_install"
-after_install = "vynce.matrix.install.after_install,vynce.install.after_install"
+after_install = "vynce.install.after_install"
 
 # Uninstallation
 # ------------
@@ -161,7 +161,7 @@ has_permission = {
 
 scheduler_events = {
 	"all": [
-		"vynce.matrix.tasks.heartbeat"
+		"vynce.matrix.tasks.synapse_healthcheck"
 	],
 }
 
@@ -200,10 +200,6 @@ scheduler_events = {
 # -----------------------------------------------------------
 
 # ignore_links_on_delete = ["Communication", "ToDo"]
-
-# Request Events
-# ----------------
-before_request = ["vynce.matrix.middleware.before_request"]
 
 # Job Events
 # ----------

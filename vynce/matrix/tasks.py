@@ -1,27 +1,49 @@
+"""Scheduled tasks for Synapse health monitoring."""
+
 import frappe
-from .storage import get_connection, init_db
+from .synapse_client import SynapseClient
 
 
 def init():
-    """Ensure Matrix DB is initialized. Called from various hooks."""
-    init_db()
+    """Ensure Synapse is initialized. Called from various hooks."""
+    pass
 
 
 def heartbeat():
-    """Periodic task: update Matrix Settings with stats."""
+    """Periodic task: check Synapse health and update Matrix Settings."""
     try:
-        conn = get_connection()
+        client = SynapseClient()
+        healthy = client.health_check()
 
-        user_count = conn.execute("SELECT COUNT(*) as c FROM users").fetchone()["c"]
-        room_count = conn.execute("SELECT COUNT(*) as c FROM rooms").fetchone()["c"]
-        event_count = conn.execute("SELECT COUNT(*) as c FROM events").fetchone()["c"]
+        if not frappe.db.exists("Matrix Settings", "Matrix Settings"):
+            return
 
-        if frappe.db.exists("Matrix Settings", "Matrix Settings"):
+        if healthy:
+            # Get stats from Synapse Admin API
+            try:
+                users_resp = client.get_users(limit=0)
+                rooms_resp = client.get_rooms(limit=0)
+                total_users = users_resp.get("total", 0)
+                total_rooms = rooms_resp.get("total", 0)
+            except Exception:
+                total_users = 0
+                total_rooms = 0
+
             frappe.db.set_value("Matrix Settings", "Matrix Settings", {
-                "total_users": user_count,
-                "total_rooms": room_count,
-                "total_events": event_count,
                 "homeserver_status": "Running",
+                "total_users": total_users,
+                "total_rooms": total_rooms,
+                "last_heartbeat": frappe.utils.now(),
+            })
+        else:
+            frappe.db.set_value("Matrix Settings", "Matrix Settings", {
+                "homeserver_status": "Error",
+                "last_heartbeat": frappe.utils.now(),
             })
     except Exception as e:
-        frappe.logger().error(f"Matrix heartbeat error: {e}")
+        frappe.logger().error(f"Synapse heartbeat error: {e}")
+
+
+def synapse_healthcheck():
+    """Dedicated health check task for Synapse."""
+    heartbeat()

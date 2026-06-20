@@ -2,7 +2,13 @@ import frappe
 
 
 def after_install():
-    """Run after app installation. Seeds interests and more."""
+    """Run after app installation. Sets up Synapse and seeds interests."""
+    try:
+        from vynce.matrix.install import after_install as setup_matrix
+        setup_matrix()
+    except Exception as e:
+        frappe.logger().error(f"Matrix setup failed (non-fatal): {e}")
+
     seed_interests()
 
 
