@@ -1,33 +1,27 @@
-"""Synapse installation and lifecycle management.
+"""Synapse setup script reference.
 
-Called from hooks.py after_install to set up Synapse for the current site.
+Synapse now runs as a process connected to a Docker PostgreSQL container.
+The Frappe-managed pip installation approach was replaced because:
+  1. Synapse on SQLite has Admin API bugs (IndexError on user/room listing)
+  2. Docker PostgreSQL provides proper isolation and locale configuration
+  3. The same Python env caused dependency conflicts with Frappe
+
+To set up Synapse from scratch:
+  ./docker/synapse/setup.sh
+
+To start Synapse:
+  ./docker/synapse/start.sh
+
+To stop:
+  ./docker/synapse/stop.sh
+
+To check status:
+  ./docker/synapse/status.sh
+
+For Frappe integration, the `synapse_client.py`, `frappe_api.py`, and
+`management.py` modules work identically regardless of how Synapse is
+deployed — they connect via HTTP to http://127.0.0.1:8008.
 """
-
-import os
-import signal
-import subprocess
-import sys
-import frappe
-from .synapse_config import (
-    setup_synapse_config,
-    get_synapse_dir,
-    SYNAPSE_PORT,
-    SERVER_NAME,
-    generate_secret,
-)
-from .synapse_client import SynapseClient, get_server_url
-
-
-def after_install():
-    """Full Synapse setup: install, configure, start.
-    
-    Called by Frappe's after_install hook.
-    """
-    _ensure_synapse_installed()
-    _ensure_matrix_settings_doctype()
-
-    # Generate config
-    yaml_path = setup_synapse_config()
 
     # Start Synapse
     pid = _start_synapse(yaml_path)

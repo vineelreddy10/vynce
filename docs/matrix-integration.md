@@ -25,9 +25,9 @@
                      │       │  Business │  │  Events     │
               ┌──────▼────┐  └───────────┘  └──────┬──────┘
               │ PostgreSQL│                        │
-              │  (or      │                 ┌──────▼──────┐
-              │   SQLite) │                 │   Redis     │
-              └───────────┘                 │  (Frappe)   │
+              │  (Docker) │                 ┌──────▼──────┐
+              └───────────┘                 │   Redis     │
+                                            │  (Frappe)   │
                                             └─────────────┘
 ```
 
@@ -35,6 +35,11 @@
 - `matrix-js-sdk` → `/_matrix/*` → **Synapse** — messages, sync, E2EE, federation
 - **Frappe API** → `/api/*` → **Frappe** — profiles, matching, discovery, app features
 - **Frappe Socket.io** — typing indicators, read receipts, presence, notifications
+
+**Deployment model:**
+- **Synapse** — runs as a bare Python process, managed by `docker/synapse/*.sh` scripts
+- **PostgreSQL** — runs in Docker (`postgres:16-alpine`), managed by Docker
+- **Frappe + Socket.io + Redis** — managed by bench as before
 
 ## Files
 
@@ -47,9 +52,12 @@
 | `vynce/matrix/frappe_api.py` | Frappe whitelisted endpoints (status, users, rooms) |
 | `vynce/matrix/realtime.py` | Frappe Socket.io events (typing, read receipts, presence) |
 | `vynce/matrix/tasks.py` | Scheduled heartbeat task |
-| `vynce/matrix/install.py` | `after_install` hook: installs/configures/starts Synapse |
-| `Procfile` (bench root) | `synapse` entry for `bench start` |
-| `sites/{site}/synapse/` | Synapse config, database, media, logs |
+| `vynce/matrix/install.py` | Setup instructions (no longer manages Synapse via pip) |
+| `docker/synapse/setup.sh` | One-time setup: start PostgreSQL, configure Synapse, create admin user |
+| `docker/synapse/start.sh` | Start Synapse + PostgreSQL |
+| `docker/synapse/stop.sh` | Stop Synapse process |
+| `docker/synapse/status.sh` | Check Synapse + PostgreSQL health |
+| `sites/{site}/synapse/` | Synapse config, media, logs |
 
 ## Key Doctypes
 
@@ -72,26 +80,30 @@ bench --site test.localhost console
 >>> get_status()
 ```
 
-### Starting / Stopping
-
-**All services via Procfile:**
+**Via Docker script:**
 ```bash
-cd /home/vineel/dev/galaxy
-bench start               # Start everything (Frappe, Synapse, Socket.io, Redis, Workers)
-bench start synapse       # Start only Synapse
+./docker/synapse/status.sh
 ```
 
-**Manual start (if not using Procfile):**
+### Starting
+
 ```bash
-cd /home/vineel/dev/galaxy
-env/bin/python -m synapse.app.homeserver \
-  --config-path sites/test.localhost/synapse/homeserver.yaml
+# First time setup (creates PostgreSQL container, generates config, starts everything)
+./docker/synapse/setup.sh
+
+# After first time (start Synapse + PostgreSQL)
+./docker/synapse/start.sh
 ```
 
-**Stop:**
+### Stopping
+
 ```bash
-kill $(cat sites/test.localhost/synapse/homeserver.pid)
-# or: bench start (Ctrl+C)
+./docker/synapse/stop.sh
+```
+
+PostgreSQL stays running. To stop it:
+```bash
+docker stop synapse-db
 ```
 
 ### Creating Users
@@ -115,66 +127,54 @@ bench --site test.localhost console
 curl "http://127.0.0.1:8002/api/method/vynce.matrix.frappe_api.create_test_room?name=MyRoom"
 ```
 
+Returns `room_id`, `users`, and `tokens` — the frontend uses the first token for C2S API calls.
+
+### Listing Rooms with a Token
+
+```bash
+curl "http://127.0.0.1:8002/api/method/vynce.matrix.frappe_api.list_rooms_for_token?token=<access_token>"
+```
+
+### Getting Room Detail with a Token
+
+```bash
+curl "http://127.0.0.1:8002/api/method/vynce.matrix.frappe_api.get_room_detail?room_id=<room_id>&token=<access_token>"
+```
+
 ### Getting the Admin Token
 
 ```bash
-bench --site test.localhost console
->>> frappe.db.get_single_value("Matrix Settings", "admin_access_token")
+cat sites/test.localhost/synapse/admin_credentials.json
 ```
 
-### Resetting the Admin User
+### Storing the Admin Token in Frappe
 
 ```bash
 bench --site test.localhost console
->>> from vynce.matrix.management import get_admin_token
->>> get_admin_token()
+>>> frappe.db.set_single_value("Matrix Settings", "admin_access_token", "<token>")
+>>> frappe.db.set_single_value("Matrix Settings", "homeserver_status", "Running")
+>>> frappe.db.commit()
 ```
 
 ## Troubleshooting
 
 ### "500 Internal Server Error" on Admin API
 
-**Symptom:** `/_synapse/admin/v2/users` and `/_synapse/admin/v1/rooms` return 500 with SQLite.
+**Symptom:** `/_synapse/admin/v2/users` and `/_synapse/admin/v1/rooms` return 500.
 
-**Cause:** Synapse 1.155.0 has a SQLite compatibility bug (`IndexError: index out of range`) on Admin API endpoints.
+**Cause on SQLite:** Synapse 1.155.0 has a SQLite compatibility bug (`IndexError: index out of range`).
 
-**Fix:** Either:
-1. **Use shared secret registration** (works) — `/_synapse/admin/v1/register`
-2. **Switch to PostgreSQL** — see below
-3. The Frappe API layer handles this automatically — `create_test_room` and `create_test_user` now use the shared secret registration
+**Fix:** Use PostgreSQL (current setup). All Admin APIs work correctly with PostgreSQL.
+The Frappe API layer (`frappe_api.py`) uses shared secret registration (not Admin API)
+for user creation, and C2S endpoints for rooms/messages — these work regardless of
+the database backend.
 
-### Enabling PostgreSQL
+### "Failed to get room detail" / Messages not loading
 
-1. Install PostgreSQL:
-   ```bash
-   sudo apt install postgresql postgresql-client libpq-dev
-   sudo systemctl start postgresql
-   ```
+**Cause:** The token passed to `get_room_detail` doesn't belong to a member of that room.
 
-2. Create database and user:
-   ```bash
-   sudo -u postgres psql -c "CREATE DATABASE synapse_vynce;"
-   sudo -u postgres psql -c "CREATE USER synapse WITH PASSWORD 'synapse';"
-   sudo -u postgres psql -c "GRANT ALL ON DATABASE synapse_vynce TO synapse;"
-   ```
-
-3. Update `homeserver.yaml`:
-   ```yaml
-   database:
-     name: psycopg2
-     args:
-       user: synapse
-       password: synapse
-       database: synapse_vynce
-       host: localhost
-       port: 5432
-   ```
-
-4. Restart Synapse:
-   ```bash
-   kill $(cat sites/test.localhost/synapse/homeserver.pid)
-   # Start again
-   ```
+**Fix:** The frontend should pass a test user's token (returned from `create_test_room`).
+If using the admin token, the admin user must be a member of the room first.
 
 ### Synapse won't start
 
@@ -187,12 +187,31 @@ Common issues:
 - **Port 8008 in use** — `lsof -ti:8008 | xargs kill`
 - **Invalid config** — run `python -m synapse.app.homeserver --config-path ...` to see errors
 - **Old PID file** — `rm sites/test.localhost/synapse/homeserver.pid`
+- **PostgreSQL not running** — `docker ps | grep synapse-db`
+
+### PostgreSQL issues
+
+```bash
+# Check if PostgreSQL container is running
+docker ps | grep synapse-db
+
+# Check PostgreSQL logs
+docker logs synapse-db
+
+# Restart PostgreSQL
+docker restart synapse-db
+
+# If locale is wrong, recreate the container
+docker rm -f synapse-db
+docker volume rm synapse-pgdata
+./docker/synapse/setup.sh
+```
 
 ### "Registration has been disabled"
 
 This is expected — C2S registration is disabled. All users are created via:
 - Shared secret registration (`POST /_synapse/admin/v1/register`)
-- Admin API (`POST /_synapse/admin/v2/users/{userId}`) — when PostgreSQL is available
+- Admin API (`POST /_synapse/admin/v2/users/{userId}`)
 
 ## Upgrade Synapse
 
@@ -203,22 +222,15 @@ env/bin/pip install --upgrade matrix-synapse
 
 ## Database
 
-Synapse uses SQLite by default at `sites/{site}/synapse/homeserver.db`.
-For production, switch to PostgreSQL as described above.
+Synapse uses **PostgreSQL** running in Docker (`postgres:16-alpine`).
+The database is named `synapse`, owned by user `synapse`, exposed on `127.0.0.1:5432`.
 
-The `_get_database_config()` function in `synapse_config.py` auto-detects
-PostgreSQL availability — if it can connect, it uses PostgreSQL; otherwise
-it falls back to SQLite.
+Data persists in the `synapse-pgdata` Docker volume:
+```bash
+docker volume inspect synapse-pgdata
+```
 
-## After Install
-
-When you run `bench --site test.localhost migrate` or the app's
-`after_install` hook fires, the following happens:
-
-1. `vynce.install.after_install()` runs
-2. Checks if `matrix-synapse` is installed — installs via pip if not
-3. Generates `sites/{site}/synapse/homeserver.yaml` with signing keys
-4. Starts the Synapse process
-5. Creates the `synapse_admin` user via shared secret registration
-6. Adds Synapse to the bench Procfile
-7. Seeds 30 interests into VY Interest doctype
+To reset the database (loses all users, rooms, messages):
+```bash
+./docker/synapse/setup.sh  # rebuilds from scratch
+```
