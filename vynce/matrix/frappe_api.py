@@ -177,8 +177,13 @@ def _do_list_rooms(token: str | None):
 
 
 @frappe.whitelist(allow_guest=True)
-def get_room_detail(room_id: str):
-    """Get room details: members, recent messages via C2S messages API."""
+def get_room_detail(room_id: str, token: str | None = None):
+    """Get room details: members, recent messages via C2S messages API.
+    
+    Args:
+        room_id: The Matrix room ID
+        token: Optional access token. Falls back to admin token if not provided.
+    """
     if not _is_ready():
         return {}
 
@@ -187,11 +192,15 @@ def get_room_detail(room_id: str):
         if not client:
             frappe.throw("Synapse not ready")
 
+        t = token or client.access_token
+        if not t:
+            frappe.throw("No access token available")
+
         # Use C2S messages endpoint
         msgs = client._c2s_request(
             "GET",
             f"/_matrix/client/v3/rooms/{room_id}/messages?dir=b&limit=50",
-            token=client.access_token,
+            token=t,
         )
         chunk = msgs.get("chunk", [])
 
@@ -199,7 +208,7 @@ def get_room_detail(room_id: str):
         members = client._c2s_request(
             "GET",
             f"/_matrix/client/v3/rooms/{room_id}/joined_members",
-            token=client.access_token,
+            token=t,
         )
         member_ids = list(members.get("joined", {}).keys())
 
