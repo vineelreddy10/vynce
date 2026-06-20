@@ -126,6 +126,7 @@ def create_test_room(name: str = "Test Room"):
             "room_id": room_id,
             "name": name,
             "users": [u["username"] for u in users],
+            "tokens": [u["token"] for u in users],
         }
     except Exception as e:
         frappe.throw(f"Failed to create room: {e}")
@@ -136,13 +137,28 @@ def list_rooms():
     """List joined Matrix rooms via C2S sync."""
     if not _is_ready():
         return []
+    return _do_list_rooms(None)
 
+
+@frappe.whitelist(allow_guest=True)
+def list_rooms_for_token(token: str | None = None):
+    """List rooms using a specific access token."""
+    if not _is_ready():
+        return []
+    return _do_list_rooms(token)
+
+
+def _do_list_rooms(token: str | None):
+    """Shared: list rooms for a given C2S token, falling back to admin token."""
     try:
         client = _get_client()
         if not client:
             return []
+        t = token or client.access_token
+        if not t:
+            return []
 
-        sync = client._c2s_request("GET", "/_matrix/client/v3/sync", token=client.access_token)
+        sync = client._c2s_request("GET", "/_matrix/client/v3/sync", token=t)
         joins = sync.get("rooms", {}).get("join", {})
         result = []
         for room_id, room_data in joins.items():
