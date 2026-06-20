@@ -1,0 +1,75 @@
+{
+ "actions": [],
+ "creation": "2026-06-20 12:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "homeserver_status",
+  "db_path",
+  "column_break_3",
+  "total_users",
+  "total_rooms",
+  "total_events"
+ ],
+ "fields": [
+  {
+   "fieldname": "homeserver_status",
+   "fieldtype": "Select",
+   "label": "Homeserver Status",
+   "options": "Running\nStopped\nError",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "db_path",
+   "fieldtype": "Data",
+   "label": "Database Path",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_3",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "total_users",
+   "fieldtype": "Int",
+   "label": "Total Users",
+   "read_only": 1
+  },
+  {
+   "fieldname": "total_rooms",
+   "fieldtype": "Int",
+   "label": "Total Rooms",
+   "read_only": 1
+  },
+  {
+   "fieldname": "total_events",
+   "fieldtype": "Int",
+   "label": "Total Events (Messages)",
+   "read_only": 1
+  }
+ ],
+ "issingle": 1,
+ "links": [],
+ "modified": "2026-06-20 12:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Vynce",
+ "name": "Matrix Settings",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

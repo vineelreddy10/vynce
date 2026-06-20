@@ -1,5 +1,8 @@
 # Byte-compiled / optimized / DLL files
 __pycache__/
+
+# Agent config - contains planning docs with infrastructure references
+.commandcode/
 *.py[cod]
 *$py.class
 *.pyc

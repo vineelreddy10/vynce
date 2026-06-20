@@ -86,7 +86,7 @@ app_license = "mit"
 # ------------
 
 # before_install = "vynce.install.before_install"
-# after_install = "vynce.install.after_install"
+after_install = "vynce.matrix.install.after_install,vynce.install.after_install"
 
 # Uninstallation
 # ------------
@@ -138,34 +138,32 @@ app_license = "mit"
 # ---------------
 # Hook on document methods and events
 
-# doc_events = {
-# 	"*": {
-# 		"on_update": "method",
-# 		"on_cancel": "method",
-# 		"on_trash": "method"
-# 	}
-# }
+doc_events = {
+	"User": {
+		"on_update": "vynce.profile.sync_user_profile",
+	},
+}
+
+# Permissions
+# -----------
+# Permissions evaluated in scripted ways
+
+permission_query_conditions = {
+	"VY User Profile": "vynce.profile.get_permission_query_conditions",
+}
+
+has_permission = {
+	"VY User Profile": "vynce.profile.has_permission",
+}
 
 # Scheduled Tasks
 # ---------------
 
-# scheduler_events = {
-# 	"all": [
-# 		"vynce.tasks.all"
-# 	],
-# 	"daily": [
-# 		"vynce.tasks.daily"
-# 	],
-# 	"hourly": [
-# 		"vynce.tasks.hourly"
-# 	],
-# 	"weekly": [
-# 		"vynce.tasks.weekly"
-# 	],
-# 	"monthly": [
-# 		"vynce.tasks.monthly"
-# 	],
-# }
+scheduler_events = {
+	"all": [
+		"vynce.matrix.tasks.heartbeat"
+	],
+}
 
 # Testing
 # -------
@@ -205,8 +203,7 @@ app_license = "mit"
 
 # Request Events
 # ----------------
-# before_request = ["vynce.utils.before_request"]
-# after_request = ["vynce.utils.after_request"]
+before_request = ["vynce.matrix.middleware.before_request"]
 
 # Job Events
 # ----------
