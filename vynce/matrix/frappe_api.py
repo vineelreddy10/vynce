@@ -61,28 +61,22 @@ def get_status():
 
 @frappe.whitelist(allow_guest=True)
 def create_test_user():
-    """Create a test Matrix user via Synapse Admin API."""
+    """Create a test Matrix user via shared secret registration."""
     import string
     import secrets
+    from .management import create_user as mgmt_create_user
 
     username = "testuser_" + "".join(secrets.choice(string.ascii_lowercase) for _ in range(6))
     password = "test123"
 
     try:
-        client = _get_client()
-        if not client:
-            frappe.throw("Synapse not ready")
-
-        result = client.create_user(username, password, displayname=f"Test User {username}")
-        user_id = result.get("name", f"@{username}:vynce.app")
-
+        result = mgmt_create_user(username, password, displayname=f"Test User {username}")
         return {
             "username": username,
-            "user_id": user_id,
+            "user_id": result["user_id"],
             "password": password,
+            "access_token": result.get("access_token", ""),
         }
-    except SynapseError as e:
-        frappe.throw(f"Synapse error: {e.body}")
     except Exception as e:
         frappe.throw(f"Failed to create user: {e}")
 
@@ -92,9 +86,10 @@ def create_test_user():
 
 @frappe.whitelist(allow_guest=True)
 def create_test_room(name: str = "Test Room"):
-    """Create a test room with two users via Synapse Admin API."""
+    """Create a test room with two users via shared secret registration."""
     import string
     import secrets
+    from .management import create_user as mgmt_create_user
 
     try:
         client = _get_client()
@@ -104,9 +99,8 @@ def create_test_room(name: str = "Test Room"):
         users = []
         for i in range(2):
             uname = "testroom_" + "".join(secrets.choice(string.ascii_lowercase) for _ in range(4))
-            result = client.create_user(uname, "test123", displayname=f"Room User {i}")
-            user_id = result.get("name", f"@{uname}:vynce.app")
-            users.append({"username": uname, "user_id": user_id})
+            result = mgmt_create_user(uname, "test123", displayname=f"Room User {i}")
+            users.append({"username": uname, "user_id": result["user_id"], "token": result.get("access_token", "")})
 
         # Create room with user 1 as creator, inviting user 2
         room = client.create_room(
@@ -117,12 +111,9 @@ def create_test_room(name: str = "Test Room"):
         )
         room_id = room.get("room_id", "")
 
-        # Login as user 1 to send a welcome message
-        login_result = client.login(users[0]["username"], "test123")
-        token = login_result.get("access_token", "")
-
-        if token:
-            client.send_message(room_id, token, {
+        # Send welcome message
+        if users[0]["token"] and room_id:
+            client.send_message(room_id, users[0]["token"], {
                 "msgtype": "m.text",
                 "body": f"Welcome to {name}! 👋",
             })
@@ -132,8 +123,6 @@ def create_test_room(name: str = "Test Room"):
             "name": name,
             "users": [u["username"] for u in users],
         }
-    except SynapseError as e:
-        frappe.throw(f"Synapse error: {e.body}")
     except Exception as e:
         frappe.throw(f"Failed to create room: {e}")
 
