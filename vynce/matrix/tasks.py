@@ -19,20 +19,8 @@ def heartbeat():
             return
 
         if healthy:
-            # Get stats from Synapse Admin API
-            try:
-                users_resp = client.get_users(limit=0)
-                rooms_resp = client.get_rooms(limit=0)
-                total_users = users_resp.get("total", 0)
-                total_rooms = rooms_resp.get("total", 0)
-            except Exception:
-                total_users = 0
-                total_rooms = 0
-
             frappe.db.set_value("Matrix Settings", "Matrix Settings", {
                 "homeserver_status": "Running",
-                "total_users": total_users,
-                "total_rooms": total_rooms,
                 "last_heartbeat": frappe.utils.now(),
             })
         else:

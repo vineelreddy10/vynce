@@ -36,7 +36,7 @@ def _is_ready():
 
 @frappe.whitelist(allow_guest=True)
 def get_status():
-    """Get Matrix homeserver status and stats."""
+    """Get Matrix homeserver status and stats using C2S API."""
     if not _is_ready():
         return SYNAPSE_NOT_READY
 
@@ -46,13 +46,9 @@ def get_status():
             return SYNAPSE_NOT_READY
 
         versions = client.get_versions()
-        users_resp = client.get_users(limit=0)
-        rooms_resp = client.get_rooms(limit=0)
 
         return {
             "status": "Running",
-            "users": users_resp.get("total", 0),
-            "rooms": rooms_resp.get("total", 0),
             "version": versions.get("versions", ["unknown"])[0],
             "server_name": "vynce.app",
         }
@@ -144,7 +140,7 @@ def create_test_room(name: str = "Test Room"):
 
 @frappe.whitelist(allow_guest=True)
 def list_rooms():
-    """List all Matrix rooms via Synapse Admin API."""
+    """List joined Matrix rooms via C2S sync."""
     if not _is_ready():
         return []
 
@@ -153,19 +149,19 @@ def list_rooms():
         if not client:
             return []
 
-        rooms_resp = client.get_rooms()
-        rooms = rooms_resp.get("rooms", [])
-
+        sync = client._c2s_request("GET", "/_matrix/client/v3/sync", token=client.access_token)
+        joins = sync.get("rooms", {}).get("join", {})
         result = []
-        for r in rooms:
+        for room_id, room_data in joins.items():
+            timeline = room_data.get("timeline", {}).get("events", [])
+            last_event = timeline[-1] if timeline else {}
             result.append({
-                "room_id": r.get("room_id", ""),
-                "name": r.get("name", ""),
-                "topic": r.get("topic", ""),
-                "member_count": r.get("joined_local_devices", 0),
+                "room_id": room_id,
+                "name": room_id,
+                "member_count": 0,
                 "state": "joined",
+                "last_message": last_event.get("content", {}).get("body", ""),
             })
-
         return result
     except Exception:
         return []
@@ -173,7 +169,7 @@ def list_rooms():
 
 @frappe.whitelist(allow_guest=True)
 def get_room_detail(room_id: str):
-    """Get room details: members, recent messages via Synapse Admin API."""
+    """Get room details: members, recent messages via C2S messages API."""
     if not _is_ready():
         return {}
 
@@ -182,16 +178,25 @@ def get_room_detail(room_id: str):
         if not client:
             frappe.throw("Synapse not ready")
 
-        room = client.get_room(room_id)
-        members_resp = client.get_room_members(room_id)
-        messages_resp = client.get_room_messages(room_id)
+        # Use C2S messages endpoint
+        msgs = client._c2s_request(
+            "GET",
+            f"/_matrix/client/v3/rooms/{room_id}/messages?dir=b&limit=50",
+            token=client.access_token,
+        )
+        chunk = msgs.get("chunk", [])
 
-        members = members_resp.get("members", [])
-        messages = messages_resp.get("messages", [])
+        # Use C2S joined_members endpoint
+        members = client._c2s_request(
+            "GET",
+            f"/_matrix/client/v3/rooms/{room_id}/joined_members",
+            token=client.access_token,
+        )
+        member_ids = list(members.get("joined", {}).keys())
 
         return {
-            "room": room,
-            "members": [m.get("user_id", m) for m in members],
+            "room_id": room_id,
+            "members": member_ids,
             "events": [
                 {
                     "event_id": m.get("event_id", ""),
@@ -200,11 +205,9 @@ def get_room_detail(room_id: str):
                     "content": m.get("content", {}),
                     "origin_server_ts": m.get("origin_server_ts", 0),
                 }
-                for m in messages
+                for m in chunk
             ],
         }
-    except SynapseError as e:
-        frappe.throw(f"Synapse error: {e.body}")
     except Exception as e:
         frappe.throw(f"Failed to get room detail: {e}")
 

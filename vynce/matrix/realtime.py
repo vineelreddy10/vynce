@@ -12,9 +12,12 @@ def _get_room_members(room_id: str) -> list[str]:
     """Get the list of Matrix user IDs in a room."""
     try:
         client = SynapseClient()
-        members_resp = client.get_room_members(room_id)
-        members = members_resp.get("members", [])
-        return [m.get("user_id", m) if isinstance(m, dict) else m for m in members]
+        members = client._c2s_request(
+            "GET",
+            f"/_matrix/client/v3/rooms/{room_id}/joined_members",
+            token=client.access_token,
+        )
+        return list(members.get("joined", {}).keys())
     except Exception:
         return []
 
