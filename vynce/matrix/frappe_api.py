@@ -102,12 +102,16 @@ def create_test_room(name: str = "Test Room"):
             result = mgmt_create_user(uname, "test123", displayname=f"Room User {i}")
             users.append({"username": uname, "user_id": result["user_id"], "token": result.get("access_token", "")})
 
-        # Create room with user 1 as creator, inviting user 2
-        room = client.create_room(
-            name=name,
-            creator=users[0]["user_id"],
-            invite=[users[1]["user_id"]],
-            is_direct=False,
+        # Create room via C2S API (user 1 creates, invites user 2)
+        room = client._c2s_request(
+            "POST",
+            "/_matrix/client/v3/createRoom",
+            {
+                "name": name,
+                "preset": "private_chat",
+                "invite": [users[1]["user_id"]],
+            },
+            token=users[0]["token"],
         )
         room_id = room.get("room_id", "")
 
