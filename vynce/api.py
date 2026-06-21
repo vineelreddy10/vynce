@@ -78,11 +78,10 @@ def _register(email, password, display_name, birth_date, gender):
 		"email": email,
 		"first_name": display_name,
 		"send_welcome_email": 0,
+		"new_password": password,
 		"roles": [{"role": "VY User"}],
 	})
 	user_doc.insert(ignore_permissions=True, ignore_links=True)
-	# Set password directly to bypass Frappe's strength check
-	frappe.utils.password.update_password("User", email, password)
 
 	# ── Create or update VY User Profile ───────────────────
 	# (sync_user_profile hook may have already created a basic one)
