@@ -145,6 +145,12 @@
    "fieldname": "device_tokens",
    "fieldtype": "JSON",
    "label": "Device Tokens"
+  },
+  {
+   "fieldname": "saved_interests",
+   "fieldtype": "JSON",
+   "label": "Saved Interests",
+   "read_only": 1
   }
  ],
  "grid_page_length": 50,
