@@ -1,9 +1,10 @@
 import frappe
 from frappe import _
+from typing import Any
 
 
 @frappe.whitelist(allow_guest=True)
-def sync_user_profile(doc: dict | None = None, method: str | None = None):
+def sync_user_profile(doc: Any = None, method: Any = None):
     """Sync Frappe User changes to VY User Profile."""
     if not doc:
         return
