@@ -18,16 +18,22 @@ def heartbeat():
         if not frappe.db.exists("Matrix Settings", "Matrix Settings"):
             return
 
+        settings = {}
+
         if healthy:
-            frappe.db.set_value("Matrix Settings", "Matrix Settings", {
-                "homeserver_status": "Running",
-                "last_heartbeat": frappe.utils.now(),
-            })
+            settings["homeserver_status"] = "Running"
+            # Fetch room count from Synapse Admin API
+            try:
+                rooms = client.get_rooms(limit=0)
+                settings["total_rooms"] = rooms.get("total_rooms", 0)
+            except Exception:
+                pass
         else:
-            frappe.db.set_value("Matrix Settings", "Matrix Settings", {
-                "homeserver_status": "Error",
-                "last_heartbeat": frappe.utils.now(),
-            })
+            settings["homeserver_status"] = "Error"
+
+        settings["last_heartbeat"] = frappe.utils.now()
+        frappe.db.set_value("Matrix Settings", "Matrix Settings", settings)
+
     except Exception as e:
         frappe.logger().error(f"Synapse heartbeat error: {e}")
 

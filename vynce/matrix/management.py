@@ -106,6 +106,24 @@ def create_user(username: str | None = None, password: str | None = None,
     }
 
 
+def get_cached_admin_token() -> str:
+    """Get admin access token with Redis caching (1 hour TTL)."""
+    try:
+        token = frappe.cache.get_value("matrix_admin_token")
+        if token:
+            return token
+    except Exception:
+        pass
+
+    token = get_admin_token()
+    if token:
+        try:
+            frappe.cache.set_value("matrix_admin_token", token, expires_in_sec=3600)
+        except Exception:
+            pass
+    return token
+
+
 def get_admin_token() -> str:
     """Return a valid admin access token for Synapse API calls.
     Creates the admin user if it doesn't exist.

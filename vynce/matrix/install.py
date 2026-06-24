@@ -23,23 +23,6 @@ For Frappe integration, the `synapse_client.py`, `frappe_api.py`, and
 deployed — they connect via HTTP to http://127.0.0.1:8008.
 """
 
-    # Start Synapse
-    pid = _start_synapse(yaml_path)
-
-    # Create admin user
-    _create_admin_user()
-
-    # Update Matrix Settings
-    _update_matrix_settings(pid)
-
-    # Add to Procfile
-    _ensure_procfile_entry(yaml_path)
-
-    frappe.logger().info(
-        f"Synapse setup complete — running on 127.0.0.1:{SYNAPSE_PORT} "
-        f"(PID {pid}), server_name={SERVER_NAME}"
-    )
-
 
 def _ensure_synapse_installed():
     """Check if matrix-synapse is installed, install if not."""

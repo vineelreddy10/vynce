@@ -234,3 +234,59 @@ To reset the database (loses all users, rooms, messages):
 ```bash
 ./docker/synapse/setup.sh  # rebuilds from scratch
 ```
+
+## Frontend: Chat Hook (`useChat`)
+
+**Location**: `vynce-mobile/src/hooks/useChat.ts`
+
+### Architecture
+
+```
+useChat(user)
+  │
+  ├── Init effect [user, mountKey]                         ← boots Matrix clients per room
+  │     ├─ getMatrixCredentials() → {baseUrl, token, user}
+  │     ├─ getMatchRooms()        → [{room_id, ...}]
+  │     └─ createClient() + startClient({initialSyncLimit: 20})
+  │
+  ├── Timeline effect (stable, never re-registers)         ← listens for live messages
+  │     └─ MatrixClient "Room.timeline" → m.room.message
+  │          ├─ seenMessagesRef (in-memory set, 500 cap)   ← app-level dedup
+  │          └─ setRooms (functional update)
+  │               ├─ event_id exact match → skip
+  │               └─ sender + body match → replace existing (local→server upgrade)
+  │
+  └── Returns: { rooms, activeRoom, sendMessage, sendTyping, ... }
+```
+
+### Duplicate Message Prevention
+
+Matrix SDK fires **two** `Room.timeline` events when sending a message:
+1. **Local echo** — event_id starts with `~` (pending)
+2. **Server confirmation** — event_id starts with `$` (different ID)
+
+The chat hook prevents duplicates at 3 levels:
+
+| Level | Mechanism | Catches |
+|-------|-----------|---------|
+| **App-level** | `seenMessagesRef` — Set of `sender\|body\|eventId` with 500 cap | Same event arriving twice in the same JS session |
+| **event_id match** | `r.messages.some(m → m.event_id === eventId)` | Redundant same-ID events |
+| **sender+body match + local-echo guard** | `findIndex(m → m.body === body && m.sender === sender && m.event_id.startsWith("~"))` then **replace** | Local echo `~id` replaced by server `$id` |
+
+The `startsWith("~")` guard is critical — without it, sending the same text twice (e.g., "hi" then "hi" again) would silently replace the old message instead of appending a new one.
+
+### Stable Listener Registration
+
+The timeline listener attached to each `MatrixClient` is registered **once per room** (tracked via `timelineRegisteredRef`). Not re-registered on every rooms state change — preventing:
+- Lost events between cleanup and re-registration
+- Multiple parallel listeners accumulating per room
+- Infinite loops (register → timeline fires → setRooms → re-run effect → register again)
+
+### Send Flow
+
+```
+sendMessage(roomId, text)
+  └── client.sendTextMessage(roomId, text)
+        └── SDK fires Room.timeline (local echo)
+        └── SDK fires Room.timeline (server echo) → replaces local entry
+```

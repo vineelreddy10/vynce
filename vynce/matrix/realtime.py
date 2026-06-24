@@ -1,11 +1,13 @@
-"""Frappe Socket.io integration for Matrix real-time events.
+"""Real-time event bridge between Frappe backend and the standalone Socket.io server.
 
-Uses Frappe's built-in Socket.io server (managed by bench) to emit
-ephemeral events: typing indicators, read receipts, presence updates.
+Exposes Frappe whitelisted endpoints that the frontend calls via REST.
+The endpoints update DB state and then broadcast via Redis pub/sub to the
+standalone Socket.io server (``vynce.socketio``), which forwards to clients.
 """
 
 import frappe
 from .synapse_client import SynapseClient
+from ..socketio_bridge import publish_sio_event
 
 
 def _get_room_members(room_id: str) -> list[str]:
@@ -43,13 +45,33 @@ def _map_matrix_user_to_frappe(matrix_user_id: str) -> str | None:
     return None
 
 
+def _get_matched_users(user: str) -> list[str]:
+    """Return all users who have an active match with *user*."""
+    try:
+        matches = frappe.get_all(
+            "VY Match",
+            filters={"is_active": 1},
+            or_filters={"user_1": user, "user_2": user},
+            fields=["user_1", "user_2"],
+        )
+        others = set()
+        for m in matches:
+            if m["user_1"] == user:
+                others.add(m["user_2"])
+            else:
+                others.add(m["user_1"])
+        return list(others)
+    except Exception:
+        return []
+
+
 # ─── Typing Indicators ───
 
 
 @frappe.whitelist()
 def send_typing(room_id: str, typing: bool = True):
     """Broadcast typing indicator to all room members except sender.
-    
+
     Called by frontend via frappe.call() when user starts/stops typing.
     """
     user = frappe.session.user
@@ -77,8 +99,8 @@ def send_read_receipt(room_id: str, event_id: str):
     for matrix_user_id in members:
         frappe_user = _map_matrix_user_to_frappe(matrix_user_id)
         if frappe_user and frappe_user != user:
-            frappe.publish_realtime(
-                "vynce:read_receipt",
+            publish_sio_event(
+                "read_receipt",
                 {"room_id": room_id, "user_id": user, "matrix_user_id": matrix_user_id, "event_id": event_id},
                 user=frappe_user,
             )
@@ -89,22 +111,28 @@ def send_read_receipt(room_id: str, event_id: str):
 
 @frappe.whitelist()
 def update_presence(presence: str = "online"):
-    """Update user presence and broadcast to connections.
-    
-    Stores last_active timestamp and broadcasts to all users who
-    have this user in their connections.
+    """Update user presence and broadcast to matched users.
+
+    1. Stores ``last_active`` timestamp on the user's profile.
+    2. Broadcasts a ``presence`` event to all matched users via the
+       standalone Socket.io server (Redis pub/sub bridge).
     """
     user = frappe.session.user
+    now = frappe.utils.now()
+
     try:
         profile = frappe.get_doc("VY User Profile", {"user": user})
-        profile.db_set("last_active", frappe.utils.now(), update_modified=False)
+        profile.db_set("last_active", now, update_modified=False)
     except Exception:
         pass
 
-    frappe.publish_realtime(
-        "vynce:presence",
-        {"user_id": user, "presence": presence, "last_active": frappe.utils.now()},
-    )
+    matched = _get_matched_users(user)
+    for matched_user in matched:
+        publish_sio_event(
+            "presence",
+            {"user_id": user, "presence": presence, "last_active": now},
+            user=matched_user,
+        )
 
 
 # ─── Match Notifications ───
