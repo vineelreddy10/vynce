@@ -15,6 +15,7 @@
   "bio",
   "location_lat",
   "location_lng",
+  "location_name",
   "max_distance_km",
   "age_min",
   "age_max",
@@ -71,13 +72,18 @@
    "fieldtype": "Float",
    "label": "Latitude"
   },
-  {
-   "fieldname": "location_lng",
-   "fieldtype": "Float",
-   "label": "Longitude"
-  },
-  {
-   "default": "50",
+   {
+    "fieldname": "location_lng",
+    "fieldtype": "Float",
+    "label": "Longitude"
+   },
+   {
+    "fieldname": "location_name",
+    "fieldtype": "Data",
+    "label": "Location Name"
+   },
+   {
+    "default": "50",
    "fieldname": "max_distance_km",
    "fieldtype": "Int",
    "label": "Max Distance (km)"
