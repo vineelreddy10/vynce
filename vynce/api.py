@@ -105,6 +105,21 @@ def _register(email, password, display_name, birth_date, gender):
 		})
 		profile.insert(ignore_permissions=True, ignore_links=True)
 
+	# ── Create Matrix user ──────────────────────────────────
+	try:
+		from vynce.matrix.management import create_user as create_matrix_user
+		matrix_username = email.split("@")[0]
+		matrix_result = create_matrix_user(
+			username=matrix_username,
+			password=password,
+			displayname=display_name,
+			admin=False,
+		)
+		matrix_user_id = matrix_result["user_id"]
+		profile.db_set("matrix_user_id", matrix_user_id, update_modified=False)
+	except Exception:
+		frappe.logger().info(f"Matrix user creation skipped for {email} (non-fatal)")
+
 	# ── Login ───────────────────────────────────────────────
 	frappe.local.login_manager.login_as(email)
 	frappe.db.commit()

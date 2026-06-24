@@ -2,9 +2,6 @@ import frappe, json, math
 from frappe import _
 from typing import Any
 
-
-from typing import Any
-
 @frappe.whitelist(allow_guest=True)
 def sync_user_profile(doc: Any = None, method: str | None = None):
     """Sync Frappe User changes to VY User Profile."""
@@ -36,7 +33,16 @@ def get_my_profile():
     if not frappe.db.exists("VY User Profile", {"user": user}):
         return {}
     profile = frappe.get_doc("VY User Profile", {"user": user})
+    _recalc_strength(profile)
     return _serialize_profile(profile)
+
+
+def _recalc_strength(profile):
+    """Compute and persist profile_strength on the profile doc."""
+    strength = _compute_strength(profile)
+    if strength != profile.profile_strength:
+        profile.db_set("profile_strength", strength, update_modified=False)
+    return strength
 
 
 def _serialize_profile(profile):
@@ -77,13 +83,14 @@ def update_profile(**kwargs):
         frappe.throw("Profile not found")
 
     profile = frappe.get_doc("VY User Profile", {"user": user})
-    allowed = {"display_name", "bio", "location_lat", "location_lng",
+    allowed = {"display_name", "bio", "location_lat", "location_lng", "location_name",
                "max_distance_km", "age_min", "age_max", "gender_preference", "gender"}
     for key, val in kwargs.items():
         if key in allowed and val is not None:
             profile.set(key, val)
     profile.save(ignore_permissions=True)
     frappe.db.commit()
+    _recalc_strength(profile)
     return _serialize_profile(profile)
 
 
@@ -111,6 +118,12 @@ def upload_photo():
     # Save file via Frappe's upload handler
     from frappe.handler import upload_file
     filedoc = upload_file()
+
+    # Make profile photos publicly accessible (not private)
+    file_doc = frappe.get_doc("File", filedoc.get("name"))
+    if file_doc:
+        file_doc.is_private = 0
+        file_doc.save(ignore_permissions=True)
     file_url = filedoc.get("file_url", "")
 
     if not file_url:
@@ -123,6 +136,7 @@ def upload_photo():
     })
     profile.save(ignore_permissions=True)
     frappe.db.commit()
+    _recalc_strength(profile)
 
     return {"name": photo.name, "image": file_url, "order": photo.order, "is_primary": photo.is_primary}
 
@@ -135,6 +149,8 @@ def delete_photo(photo_name: str):
         return {"ok": False}
     frappe.delete_doc("VY Profile Photo", photo_name, ignore_permissions=True)
     frappe.db.commit()
+    profile = frappe.get_doc("VY User Profile", {"user": frappe.session.user})
+    _recalc_strength(profile)
     return {"ok": True}
 
 
@@ -187,6 +203,7 @@ def save_interests(interest_names: list):
     profile.set("saved_interests", json.dumps(interest_names))
     profile.save(ignore_permissions=True)
     frappe.db.commit()
+    _recalc_strength(profile)
     return {"ok": True, "interests": interest_names}
 
 
@@ -209,6 +226,7 @@ def save_prompts(prompts: list):
             profile.append("prompts", {"prompt": p["prompt"], "answer": p["answer"]})
     profile.save(ignore_permissions=True)
     frappe.db.commit()
+    _recalc_strength(profile)
     return {"ok": True, "count": len(profile.get("prompts", []))}
 
 
@@ -232,6 +250,7 @@ def save_preferences(data: str):
             profile.set(key, vals[key])
     profile.save(ignore_permissions=True)
     frappe.db.commit()
+    _recalc_strength(profile)
     return {"ok": True}
 
 
@@ -313,3 +332,21 @@ def has_permission(doc, ptype: str, user: str | None = None) -> bool:
     if ptype == "read" and doc.is_active:
         return True
     return False
+
+
+@frappe.whitelist(allow_guest=True)
+def get_photo(photo_name: str):
+    """Public endpoint to serve profile photos without cookie auth."""
+    if not frappe.db.exists("VY Profile Photo", photo_name):
+        frappe.throw("Photo not found", frappe.PageDoesNotExistError)
+
+    image = frappe.db.get_value("VY Profile Photo", photo_name, "image")
+    if not image:
+        frappe.throw("Photo not found", frappe.PageDoesNotExistError)
+
+    # Strip leading / and route through Frappe's file handler
+    file_path = image.lstrip("/")
+    # Build full URL to the file
+    site_url = frappe.utils.get_url()
+    return {"url": f"{site_url}/{file_path}", "path": file_path}
+
