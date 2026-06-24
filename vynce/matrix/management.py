@@ -17,8 +17,12 @@ from .synapse_config import get_synapse_dir, SERVER_NAME, SYNAPSE_PORT
 
 
 def get_server_url() -> str:
-    """Return the base URL of the local Synapse instance."""
-    return f"http://127.0.0.1:{SYNAPSE_PORT}"
+    """Return the base URL of the local Synapse instance.
+    
+    Uses SYNAPSE_HOST env var in Docker deployments, falls back to 127.0.0.1.
+    """
+    host = os.environ.get("SYNAPSE_HOST", "127.0.0.1")
+    return f"http://{host}:{SYNAPSE_PORT}"
 
 
 def _read_shared_secret() -> str:

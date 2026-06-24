@@ -5,6 +5,8 @@ Matrix management. The actual Matrix C2S API is handled directly by
 Synapse at /_matrix/*.
 """
 
+import os
+
 import frappe
 from frappe import _
 from .synapse_client import SynapseClient, SynapseError
@@ -25,7 +27,8 @@ def _is_ready():
     try:
         import requests
         from .synapse_config import SYNAPSE_PORT
-        resp = requests.get(f"http://127.0.0.1:{SYNAPSE_PORT}/_matrix/client/versions", timeout=2)
+        host = os.environ.get("SYNAPSE_HOST", "127.0.0.1")
+        resp = requests.get(f"http://{host}:{SYNAPSE_PORT}/_matrix/client/versions", timeout=2)
         return resp.status_code == 200
     except Exception:
         return False

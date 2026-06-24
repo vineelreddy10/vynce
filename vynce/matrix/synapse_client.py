@@ -29,10 +29,14 @@ def get_admin_token() -> str | None:
 
 
 def get_server_url() -> str:
-    """Return the base URL of the local Synapse instance."""
+    """Return the base URL of the local Synapse instance.
+    
+    Uses SYNAPSE_HOST env var in Docker deployments, falls back to 127.0.0.1.
+    """
     from .synapse_config import SYNAPSE_PORT
 
-    return f"http://127.0.0.1:{SYNAPSE_PORT}"
+    host = os.environ.get("SYNAPSE_HOST", "127.0.0.1")
+    return f"http://{host}:{SYNAPSE_PORT}"
 
 
 class SynapseClient:
