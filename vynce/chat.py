@@ -1,5 +1,7 @@
 """Chat-related API endpoints: Matrix credentials, TURN credentials for WebRTC calls."""
 
+import os
+
 import frappe
 from .matrix.synapse_config import SYNAPSE_PORT
 
@@ -56,10 +58,15 @@ def get_matrix_credentials():
     except Exception as e:
         frappe.throw(f"Failed to get Matrix access token: {e}")
 
+    matrix_server_url = os.environ.get(
+        "MATRIX_SERVER_URL",
+        f"http://127.0.0.1:{SYNAPSE_PORT}"
+    )
+
     return {
         "matrix_user_id": profile.matrix_user_id,
         "matrix_access_token": token,
-        "matrix_server_url": f"http://127.0.0.1:{SYNAPSE_PORT}",
+        "matrix_server_url": matrix_server_url,
     }
 
 
