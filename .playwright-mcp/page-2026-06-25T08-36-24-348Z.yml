@@ -1,0 +1,28 @@
+- generic [ref=e4]:
+  - generic [ref=e8]:
+    - generic [ref=e9]: ⚡
+    - heading "Vynce" [level=1] [ref=e10]
+    - paragraph [ref=e11]: Connect with your community.
+    - paragraph [ref=e12]: Join Vynce to discover local groups, shared interests, and meaningful connections.
+  - generic [ref=e14]:
+    - generic [ref=e15]:
+      - generic [ref=e16]:
+        - generic [ref=e17]: Email or Username
+        - textbox "you@example.com" [ref=e18]
+      - generic [ref=e19]:
+        - generic [ref=e20]: Password
+        - textbox "••••••••" [ref=e21]
+      - button "Sign In" [disabled] [ref=e22]
+    - generic [ref=e25]: or
+    - generic [ref=e27]:
+      - button "Google" [ref=e28]:
+        - img [ref=e29]
+        - text: Google
+      - button "Apple" [ref=e34]:
+        - img [ref=e35]
+        - text: Apple
+    - paragraph [ref=e37]:
+      - text: Don't have an account?
+      - link "Create one" [ref=e38] [cursor=pointer]:
+        - /url: /register
+    - paragraph [ref=e39]: By continuing, you agree to Vynce's Terms of Service and Privacy Policy.

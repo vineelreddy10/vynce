@@ -5,7 +5,7 @@
 from frappe.model.document import Document
 
 
-class VYGroupMember(Document):
+class VYGroupPost(Document):
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
 
@@ -14,11 +14,12 @@ class VYGroupMember(Document):
 	if TYPE_CHECKING:
 		from frappe.types import DF
 
+		content: DF.Text | None
+		created_at: DF.Datetime | None
 		group: DF.Link
-		join_request_status: DF.Literal["Pending", "Approved", "Rejected"]
-		joined_at: DF.Datetime | None
-		role: DF.Literal["Admin", "Member"]
+		media: DF.Attach | None
+		media_type: DF.Literal["", "Image", "Video"] | None
 		user: DF.Link
 	# end: auto-generated types
 
-	_DOCTYPE_NAME = "VY Group Member"
+	_DOCTYPE_NAME = "VY Group Post"

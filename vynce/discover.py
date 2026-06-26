@@ -129,6 +129,97 @@ def get_feed(page: int = 1, page_size: int = 20):
 
 
 @frappe.whitelist()
+def get_user_profile(user: str):
+	"""Return full profile details for a specific user (for the profile detail page)."""
+	current_user = frappe.session.user
+	if current_user == "Guest":
+		frappe.throw("Not logged in", frappe.AuthenticationError)
+
+	if not frappe.db.exists("VY User Profile", {"user": user}):
+		frappe.throw("User not found")
+
+	# Get the target profile
+	p = frappe.get_doc("VY User Profile", {"user": user})
+
+	# Calculate distance from current user
+	distance = None
+	my_profile = frappe.get_doc("VY User Profile", {"user": current_user})
+	if my_profile and my_profile.location_lat and my_profile.location_lng and p.location_lat and p.location_lng:
+		distance = round(_haversine(
+			my_profile.location_lat, my_profile.location_lng,
+			p.location_lat, p.location_lng
+		), 1)
+
+	# Check match status
+	match = frappe.db.get_value(
+		"VY Match",
+		{
+			"user_1": ["in", [current_user, user]],
+			"user_2": ["in", [current_user, user]],
+			"is_active": 1,
+		},
+		["name", "matrix_room_id"],
+		as_dict=True,
+	)
+
+	# Check like status
+	liked = frappe.db.exists("VY Like", {"from_user": current_user, "to_user": user})
+
+	# Get photos
+	photos = frappe.get_all(
+		"VY Profile Photo",
+		filters={"parent": p.name},
+		fields=["name", "image", "order", "is_primary"],
+		order_by="order asc, idx asc",
+	)
+
+	# Get primary photo
+	primary_photo = ""
+	for ph in photos:
+		if ph.is_primary:
+			primary_photo = ph.image
+			break
+	if not primary_photo and photos:
+		primary_photo = photos[0].image
+
+	# Get interests
+	interests = json.loads(p.get("saved_interests") or "[]")
+
+	# Get prompts
+	prompts_raw = p.get("prompts") or []
+	prompts = []
+	for pr in prompts_raw:
+		prompts.append({
+			"name": pr.get("name", ""),
+			"prompt": pr.get("prompt", ""),
+			"answer": pr.get("answer", ""),
+		})
+
+	return {
+		"name": p.name,
+		"user": p.user,
+		"display_name": p.display_name,
+		"age": calculate_age(p.birth_date) if p.birth_date else None,
+		"bio": p.bio or "",
+		"gender": p.gender or "",
+		"latitude": p.location_lat,
+		"longitude": p.location_lng,
+		"distance_km": distance,
+		"location_name": p.get("location_name", "") or "",
+		"interests": interests,
+		"common_interests_count": 0,
+		"primary_photo": primary_photo,
+		"photos": photos,
+		"prompts": prompts,
+		"profile_strength": p.profile_strength,
+		"is_active": p.is_active,
+		"match_status": "matched" if match else ("liked" if liked else None),
+		"match_id": match.name if match else None,
+		"matrix_room_id": match.matrix_room_id if match else None,
+	}
+
+
+@frappe.whitelist()
 def like_user(to_user: str, like_type: str):
 	"""Like, Super Like, or Pass a user. Triggers match check on Like/Super Like."""
 	user = frappe.session.user

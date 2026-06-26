@@ -7,15 +7,17 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "title",
-  "description",
-  "cover_image",
-  "category",
-  "location",
-  "member_count",
-  "created_by",
-  "is_active"
- ],
+   "title",
+   "description",
+   "cover_image",
+   "category",
+   "location",
+   "privacy",
+   "rules",
+   "member_count",
+   "created_by",
+   "is_active"
+  ],
  "fields": [
   {
    "fieldname": "title",
@@ -41,12 +43,24 @@
    "options": "VY Interest"
   },
   {
-   "fieldname": "location",
-   "fieldtype": "Data",
-   "label": "Location"
-  },
-  {
-   "fieldname": "member_count",
+    "fieldname": "location",
+    "fieldtype": "Data",
+    "label": "Location"
+   },
+   {
+    "default": "Public",
+    "fieldname": "privacy",
+    "fieldtype": "Select",
+    "label": "Privacy",
+    "options": "Public\nPrivate"
+   },
+   {
+    "fieldname": "rules",
+    "fieldtype": "Text",
+    "label": "Group Rules"
+   },
+   {
+    "fieldname": "member_count",
    "fieldtype": "Int",
    "label": "Member Count"
   },

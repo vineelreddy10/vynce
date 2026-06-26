@@ -198,6 +198,12 @@ def unmatch(match_name: str):
 	match.save(ignore_permissions=True)
 	frappe.db.commit()
 
+	# Delete reciprocal VY Like records so both users can see each
+	# other in their discover feeds again. Without this, the stale
+	# Like records permanently exclude the other person from discover.
+	for u1, u2 in [(match.user_1, match.user_2), (match.user_2, match.user_1)]:
+		frappe.db.delete("VY Like", {"from_user": u1, "to_user": u2})
+
 	# Invalidate discover cache for both users
 	for u in (match.user_1, match.user_2):
 		frappe.cache.delete_value(f"discover_feed:{u}")

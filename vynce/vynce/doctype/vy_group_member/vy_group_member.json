@@ -7,11 +7,12 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "group",
-  "user",
-  "role",
-  "joined_at"
- ],
+   "group",
+   "user",
+   "role",
+   "join_request_status",
+   "joined_at"
+  ],
  "fields": [
   {
    "fieldname": "group",
@@ -29,15 +30,23 @@
    "options": "User",
    "reqd": 1
   },
-  {
-   "default": "Member",
-   "fieldname": "role",
-   "fieldtype": "Select",
-   "label": "Role",
-   "options": "Admin\nMember"
-  },
-  {
-   "fieldname": "joined_at",
+   {
+    "default": "Member",
+    "fieldname": "role",
+    "fieldtype": "Select",
+    "label": "Role",
+    "options": "Admin\nMember"
+   },
+   {
+    "default": "Approved",
+    "fieldname": "join_request_status",
+    "fieldtype": "Select",
+    "in_list_view": 1,
+    "label": "Join Request Status",
+    "options": "Pending\nApproved\nRejected"
+   },
+   {
+    "fieldname": "joined_at",
    "fieldtype": "Datetime",
    "label": "Joined At"
   }

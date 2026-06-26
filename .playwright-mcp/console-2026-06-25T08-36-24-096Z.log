@@ -1,0 +1,14 @@
+[     148ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=79e580e1:14337
+[     259ms] [WARNING] [socket] not initialized, cannot listen to presence @ http://127.0.0.1:5173/src/api/socket.ts:41
+[     259ms] [WARNING] [socket] not initialized, cannot listen to connect @ http://127.0.0.1:5173/src/api/socket.ts:41
+[     266ms] [WARNING] [socket] connection error: unauthorized @ http://127.0.0.1:5173/src/api/socket.ts:22
+[     278ms] [ERROR] Failed to load resource: the server responded with a status of 404 (NOT FOUND) @ http://127.0.0.1:5173/api/method/vynce.chat.get_matrix_credentials:0
+[     300ms] [ERROR] Failed to load resource: the server responded with a status of 404 (NOT FOUND) @ http://127.0.0.1:5173/api/method/vynce.chat.get_matrix_credentials:0
+[     301ms] [ERROR] [CallProvider] Failed to init Matrix client: AxiosError: Request failed with status code 404
+    at settle (http://127.0.0.1:5173/node_modules/.vite/deps/axios.js?v=79e580e1:1752:14)
+    at XMLHttpRequest.onloadend (http://127.0.0.1:5173/node_modules/.vite/deps/axios.js?v=79e580e1:2105:4)
+    at Axios$1.request (http://127.0.0.1:5173/node_modules/.vite/deps/axios.js?v=79e580e1:2854:37)
+    at async doFetch (http://127.0.0.1:5173/src/api/chat.ts:5:15)
+    at async getMatrixCredentials (http://127.0.0.1:5173/src/api/chat.ts:14:11)
+    at async init (http://127.0.0.1:5173/src/contexts/CallContext.tsx:61:19) @ http://127.0.0.1:5173/src/contexts/CallContext.tsx:145
+[    9534ms] [WARNING] [socket] connection error: unauthorized @ http://127.0.0.1:5173/src/api/socket.ts:22

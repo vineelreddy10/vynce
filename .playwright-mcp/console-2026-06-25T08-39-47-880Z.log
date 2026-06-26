@@ -1,0 +1,204 @@
+[     306ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:5173/node_modules/.vite/deps/react-dom_client.js?v=79e580e1:14337
+[   62495ms] [WARNING] [socket] not initialized, cannot listen to presence @ http://localhost:5173/src/api/socket.ts:41
+[   62495ms] [WARNING] [socket] not initialized, cannot listen to connect @ http://localhost:5173/src/api/socket.ts:41
+[   62535ms] [LOG] [CallProvider] callEventHandler patched, registering Event listener @ http://localhost:5173/src/contexts/CallContext.tsx:72
+[   62611ms] [WARNING] Adding default global override push rule .org.matrix.msc3786.rule.room.server_acl @ http://localhost:5173/node_modules/.vite/deps/indexeddb-crypto-store-CTWeDihb.js?v=79e580e1:7825
+[   62611ms] [WARNING] Adding default global underride push rule .org.matrix.msc3914.rule.room.call @ http://localhost:5173/node_modules/.vite/deps/indexeddb-crypto-store-CTWeDihb.js?v=79e580e1:7825
+[   62693ms] [WARNING] Adding default global override push rule .org.matrix.msc3786.rule.room.server_acl @ http://localhost:5173/node_modules/.vite/deps/indexeddb-crypto-store-CTWeDihb.js?v=79e580e1:7825
+[   62693ms] [WARNING] Adding default global underride push rule .org.matrix.msc3914.rule.room.call @ http://localhost:5173/node_modules/.vite/deps/indexeddb-crypto-store-CTWeDihb.js?v=79e580e1:7825
+[   62712ms] [LOG] [CallProvider.Event] type=m.call.candidates roomId=!MYfWbNnwKaiTYmEYVQ:vynce.app sender=@alex:vynce.app self=@casey:vynce.app hasOffer=false hasAnswer=false hasCandidates=true @ http://localhost:5173/src/contexts/CallContext.tsx:79
+[   62712ms] [LOG] [CallProvider] ICE candidates received: 10 @ http://localhost:5173/src/contexts/CallContext.tsx:119
+[   62713ms] [LOG] [CallProvider.Event] type=m.call.hangup roomId=!MYfWbNnwKaiTYmEYVQ:vynce.app sender=@alex:vynce.app self=@casey:vynce.app hasOffer=false hasAnswer=false hasCandidates=false @ http://localhost:5173/src/contexts/CallContext.tsx:79
+[   62713ms] [LOG] [CallProvider] HANGUP received @ http://localhost:5173/src/contexts/CallContext.tsx:115
+[   62713ms] [LOG] [CallProvider.Event] type=m.call.invite roomId=!MYfWbNnwKaiTYmEYVQ:vynce.app sender=@casey:vynce.app self=@casey:vynce.app hasOffer=true hasAnswer=false hasCandidates=false @ http://localhost:5173/src/contexts/CallContext.tsx:79
+[   62713ms] [LOG] [CallProvider] SKIP own invite @ http://localhost:5173/src/contexts/CallContext.tsx:84
+[   62713ms] [LOG] [CallProvider.Event] type=m.call.candidates roomId=!MYfWbNnwKaiTYmEYVQ:vynce.app sender=@casey:vynce.app self=@casey:vynce.app hasOffer=false hasAnswer=false hasCandidates=true @ http://localhost:5173/src/contexts/CallContext.tsx:79
+[   62713ms] [LOG] [CallProvider] ICE candidates received: 10 @ http://localhost:5173/src/contexts/CallContext.tsx:119
+[   62713ms] [LOG] [CallProvider.Event] type=m.call.hangup roomId=!MYfWbNnwKaiTYmEYVQ:vynce.app sender=@casey:vynce.app self=@casey:vynce.app hasOffer=false hasAnswer=false hasCandidates=false @ http://localhost:5173/src/contexts/CallContext.tsx:79
+[   62713ms] [LOG] [CallProvider] HANGUP received @ http://localhost:5173/src/contexts/CallContext.tsx:115
+[   62713ms] [LOG] [CallProvider.Event] type=m.call.invite roomId=!MYfWbNnwKaiTYmEYVQ:vynce.app sender=@alex:vynce.app self=@casey:vynce.app hasOffer=true hasAnswer=false hasCandidates=false @ http://localhost:5173/src/contexts/CallContext.tsx:79
+[   62713ms] [LOG] [CallProvider] INVITE received — setting incomingCall + ringing state @ http://localhost:5173/src/contexts/CallContext.tsx:87
+[   62713ms] [LOG] [CallProvider] State set — CallOverlay should render now @ http://localhost:5173/src/contexts/CallContext.tsx:103
+[   62713ms] [LOG] [CallProvider.Event] type=m.call.candidates roomId=!MYfWbNnwKaiTYmEYVQ:vynce.app sender=@alex:vynce.app self=@casey:vynce.app hasOffer=false hasAnswer=false hasCandidates=true @ http://localhost:5173/src/contexts/CallContext.tsx:79
+[   62713ms] [LOG] [CallProvider] ICE candidates received: 10 @ http://localhost:5173/src/contexts/CallContext.tsx:119
+[   62713ms] [LOG] [CallProvider.Event] type=m.call.hangup roomId=!MYfWbNnwKaiTYmEYVQ:vynce.app sender=@alex:vynce.app self=@casey:vynce.app hasOffer=false hasAnswer=false hasCandidates=false @ http://localhost:5173/src/contexts/CallContext.tsx:79
+[   62713ms] [LOG] [CallProvider] HANGUP received @ http://localhost:5173/src/contexts/CallContext.tsx:115
+[   62714ms] [LOG] [CallProvider.Event] type=m.call.invite roomId=!MYfWbNnwKaiTYmEYVQ:vynce.app sender=@alex:vynce.app self=@casey:vynce.app hasOffer=true hasAnswer=false hasCandidates=false @ http://localhost:5173/src/contexts/CallContext.tsx:79
+[   62714ms] [LOG] [CallProvider] INVITE received — setting incomingCall + ringing state @ http://localhost:5173/src/contexts/CallContext.tsx:87
+[   62714ms] [LOG] [CallProvider] State set — CallOverlay should render now @ http://localhost:5173/src/contexts/CallContext.tsx:103
+[   62714ms] [LOG] [CallProvider.Event] type=m.call.candidates roomId=!MYfWbNnwKaiTYmEYVQ:vynce.app sender=@alex:vynce.app self=@casey:vynce.app hasOffer=false hasAnswer=false hasCandidates=true @ http://localhost:5173/src/contexts/CallContext.tsx:79
+[   62714ms] [LOG] [CallProvider] ICE candidates received: 10 @ http://localhost:5173/src/contexts/CallContext.tsx:119
+[   62714ms] [LOG] [CallProvider.Event] type=m.call.hangup roomId=!MYfWbNnwKaiTYmEYVQ:vynce.app sender=@alex:vynce.app self=@casey:vynce.app hasOffer=false hasAnswer=false hasCandidates=false @ http://localhost:5173/src/contexts/CallContext.tsx:79
+[   62714ms] [LOG] [CallProvider] HANGUP received @ http://localhost:5173/src/contexts/CallContext.tsx:115
+[   62714ms] [LOG] [CallProvider.Event] type=m.call.invite roomId=!MYfWbNnwKaiTYmEYVQ:vynce.app sender=@alex:vynce.app self=@casey:vynce.app hasOffer=true hasAnswer=false hasCandidates=false @ http://localhost:5173/src/contexts/CallContext.tsx:79
+[   62714ms] [LOG] [CallProvider] INVITE received — setting incomingCall + ringing state @ http://localhost:5173/src/contexts/CallContext.tsx:87
+[   62714ms] [LOG] [CallProvider] State set — CallOverlay should render now @ http://localhost:5173/src/contexts/CallContext.tsx:103
+[   62714ms] [LOG] [CallProvider.Event] type=m.call.candidates roomId=!MYfWbNnwKaiTYmEYVQ:vynce.app sender=@alex:vynce.app self=@casey:vynce.app hasOffer=false hasAnswer=false hasCandidates=true @ http://localhost:5173/src/contexts/CallContext.tsx:79
+[   62714ms] [LOG] [CallProvider] ICE candidates received: 10 @ http://localhost:5173/src/contexts/CallContext.tsx:119
+[   62714ms] [LOG] [CallProvider.Event] type=m.call.hangup roomId=!MYfWbNnwKaiTYmEYVQ:vynce.app sender=@alex:vynce.app self=@casey:vynce.app hasOffer=false hasAnswer=false hasCandidates=false @ http://localhost:5173/src/contexts/CallContext.tsx:79
+[   62714ms] [LOG] [CallProvider] HANGUP received @ http://localhost:5173/src/contexts/CallContext.tsx:115
+[   62714ms] [LOG] [CallProvider.Event] type=m.call.invite roomId=!MYfWbNnwKaiTYmEYVQ:vynce.app sender=@alex:vynce.app self=@casey:vynce.app hasOffer=true hasAnswer=false hasCandidates=false @ http://localhost:5173/src/contexts/CallContext.tsx:79
+[   62715ms] [LOG] [CallProvider] INVITE received — setting incomingCall + ringing state @ http://localhost:5173/src/contexts/CallContext.tsx:87
+[   62715ms] [LOG] [CallProvider] State set — CallOverlay should render now @ http://localhost:5173/src/contexts/CallContext.tsx:103
+[   62715ms] [LOG] [CallProvider.Event] type=m.call.candidates roomId=!MYfWbNnwKaiTYmEYVQ:vynce.app sender=@alex:vynce.app self=@casey:vynce.app hasOffer=false hasAnswer=false hasCandidates=true @ http://localhost:5173/src/contexts/CallContext.tsx:79
+[   62715ms] [LOG] [CallProvider] ICE candidates received: 10 @ http://localhost:5173/src/contexts/CallContext.tsx:119
+[   62715ms] [LOG] [CallProvider.Event] type=m.call.hangup roomId=!MYfWbNnwKaiTYmEYVQ:vynce.app sender=@alex:vynce.app self=@casey:vynce.app hasOffer=false hasAnswer=false hasCandidates=false @ http://localhost:5173/src/contexts/CallContext.tsx:79
+[   62715ms] [LOG] [CallProvider] HANGUP received @ http://localhost:5173/src/contexts/CallContext.tsx:115
+[   62715ms] [LOG] [CallProvider.Event] type=m.call.invite roomId=!MYfWbNnwKaiTYmEYVQ:vynce.app sender=@alex:vynce.app self=@casey:vynce.app hasOffer=true hasAnswer=false hasCandidates=false @ http://localhost:5173/src/contexts/CallContext.tsx:79
+[   62715ms] [LOG] [CallProvider] INVITE received — setting incomingCall + ringing state @ http://localhost:5173/src/contexts/CallContext.tsx:87
+[   62715ms] [LOG] [CallProvider] State set — CallOverlay should render now @ http://localhost:5173/src/contexts/CallContext.tsx:103
+[   62715ms] [LOG] [CallProvider.Event] type=m.call.candidates roomId=!MYfWbNnwKaiTYmEYVQ:vynce.app sender=@alex:vynce.app self=@casey:vynce.app hasOffer=false hasAnswer=false hasCandidates=true @ http://localhost:5173/src/contexts/CallContext.tsx:79
+[   62715ms] [LOG] [CallProvider] ICE candidates received: 10 @ http://localhost:5173/src/contexts/CallContext.tsx:119
+[   62715ms] [LOG] [CallProvider.Event] type=m.call.hangup roomId=!MYfWbNnwKaiTYmEYVQ:vynce.app sender=@alex:vynce.app self=@casey:vynce.app hasOffer=false hasAnswer=false hasCandidates=false @ http://localhost:5173/src/contexts/CallContext.tsx:79
+[   62715ms] [LOG] [CallProvider] HANGUP received @ http://localhost:5173/src/contexts/CallContext.tsx:115
+[   62716ms] [LOG] [CallProvider.Event] type=m.call.invite roomId=!MYfWbNnwKaiTYmEYVQ:vynce.app sender=@alex:vynce.app self=@casey:vynce.app hasOffer=true hasAnswer=false hasCandidates=false @ http://localhost:5173/src/contexts/CallContext.tsx:79
+[   62716ms] [LOG] [CallProvider] INVITE received — setting incomingCall + ringing state @ http://localhost:5173/src/contexts/CallContext.tsx:87
+[   62716ms] [LOG] [CallProvider] State set — CallOverlay should render now @ http://localhost:5173/src/contexts/CallContext.tsx:103
+[   62716ms] [LOG] [CallProvider.Event] type=m.call.candidates roomId=!MYfWbNnwKaiTYmEYVQ:vynce.app sender=@alex:vynce.app self=@casey:vynce.app hasOffer=false hasAnswer=false hasCandidates=true @ http://localhost:5173/src/contexts/CallContext.tsx:79
+[   62716ms] [LOG] [CallProvider] ICE candidates received: 10 @ http://localhost:5173/src/contexts/CallContext.tsx:119
+[   62716ms] [LOG] [CallProvider.Event] type=m.call.hangup roomId=!MYfWbNnwKaiTYmEYVQ:vynce.app sender=@alex:vynce.app self=@casey:vynce.app hasOffer=false hasAnswer=false hasCandidates=false @ http://localhost:5173/src/contexts/CallContext.tsx:79
+[   62716ms] [LOG] [CallProvider] HANGUP received @ http://localhost:5173/src/contexts/CallContext.tsx:115
+[   62716ms] [LOG] [CallProvider.Event] type=m.call.invite roomId=!MYfWbNnwKaiTYmEYVQ:vynce.app sender=@casey:vynce.app self=@casey:vynce.app hasOffer=true hasAnswer=false hasCandidates=false @ http://localhost:5173/src/contexts/CallContext.tsx:79
+[   62716ms] [LOG] [CallProvider] SKIP own invite @ http://localhost:5173/src/contexts/CallContext.tsx:84
+[   62716ms] [LOG] [CallProvider.Event] type=m.call.candidates roomId=!MYfWbNnwKaiTYmEYVQ:vynce.app sender=@casey:vynce.app self=@casey:vynce.app hasOffer=false hasAnswer=false hasCandidates=true @ http://localhost:5173/src/contexts/CallContext.tsx:79
+[   62716ms] [LOG] [CallProvider] ICE candidates received: 10 @ http://localhost:5173/src/contexts/CallContext.tsx:119
+[   62716ms] [LOG] [CallProvider.Event] type=m.call.hangup roomId=!MYfWbNnwKaiTYmEYVQ:vynce.app sender=@casey:vynce.app self=@casey:vynce.app hasOffer=false hasAnswer=false hasCandidates=false @ http://localhost:5173/src/contexts/CallContext.tsx:79
+[   62716ms] [LOG] [CallProvider] HANGUP received @ http://localhost:5173/src/contexts/CallContext.tsx:115
+[   62716ms] [LOG] [CallProvider.Event] type=m.call.invite roomId=!MYfWbNnwKaiTYmEYVQ:vynce.app sender=@casey:vynce.app self=@casey:vynce.app hasOffer=true hasAnswer=false hasCandidates=false @ http://localhost:5173/src/contexts/CallContext.tsx:79
+[   62716ms] [LOG] [CallProvider] SKIP own invite @ http://localhost:5173/src/contexts/CallContext.tsx:84
+[   62716ms] [LOG] [CallProvider.Event] type=m.call.candidates roomId=!MYfWbNnwKaiTYmEYVQ:vynce.app sender=@casey:vynce.app self=@casey:vynce.app hasOffer=false hasAnswer=false hasCandidates=true @ http://localhost:5173/src/contexts/CallContext.tsx:79
+[   62716ms] [LOG] [CallProvider] ICE candidates received: 10 @ http://localhost:5173/src/contexts/CallContext.tsx:119
+[   62716ms] [LOG] [CallProvider.Event] type=m.call.hangup roomId=!MYfWbNnwKaiTYmEYVQ:vynce.app sender=@casey:vynce.app self=@casey:vynce.app hasOffer=false hasAnswer=false hasCandidates=false @ http://localhost:5173/src/contexts/CallContext.tsx:79
+[   62716ms] [LOG] [CallProvider] HANGUP received @ http://localhost:5173/src/contexts/CallContext.tsx:115
+[   62716ms] [LOG] [CallProvider.Event] type=m.call.invite roomId=!MYfWbNnwKaiTYmEYVQ:vynce.app sender=@casey:vynce.app self=@casey:vynce.app hasOffer=true hasAnswer=false hasCandidates=false @ http://localhost:5173/src/contexts/CallContext.tsx:79
+[   62717ms] [LOG] [CallProvider] SKIP own invite @ http://localhost:5173/src/contexts/CallContext.tsx:84
+[   62717ms] [LOG] [CallProvider.Event] type=m.call.candidates roomId=!MYfWbNnwKaiTYmEYVQ:vynce.app sender=@casey:vynce.app self=@casey:vynce.app hasOffer=false hasAnswer=false hasCandidates=true @ http://localhost:5173/src/contexts/CallContext.tsx:79
+[   62717ms] [LOG] [CallProvider] ICE candidates received: 8 @ http://localhost:5173/src/contexts/CallContext.tsx:119
+[   62717ms] [LOG] [CallProvider.Event] type=m.call.candidates roomId=!MYfWbNnwKaiTYmEYVQ:vynce.app sender=@casey:vynce.app self=@casey:vynce.app hasOffer=false hasAnswer=false hasCandidates=true @ http://localhost:5173/src/contexts/CallContext.tsx:79
+[   62717ms] [LOG] [CallProvider] ICE candidates received: 2 @ http://localhost:5173/src/contexts/CallContext.tsx:119
+[   62717ms] [LOG] [CallProvider.Event] type=m.call.hangup roomId=!MYfWbNnwKaiTYmEYVQ:vynce.app sender=@casey:vynce.app self=@casey:vynce.app hasOffer=false hasAnswer=false hasCandidates=false @ http://localhost:5173/src/contexts/CallContext.tsx:79
+[   62717ms] [LOG] [CallProvider] HANGUP received @ http://localhost:5173/src/contexts/CallContext.tsx:115
+[   62717ms] [LOG] [CallProvider.Event] type=m.call.invite roomId=!MYfWbNnwKaiTYmEYVQ:vynce.app sender=@casey:vynce.app self=@casey:vynce.app hasOffer=true hasAnswer=false hasCandidates=false @ http://localhost:5173/src/contexts/CallContext.tsx:79
+[   62717ms] [LOG] [CallProvider] SKIP own invite @ http://localhost:5173/src/contexts/CallContext.tsx:84
+[   62717ms] [LOG] [CallProvider.Event] type=m.call.candidates roomId=!MYfWbNnwKaiTYmEYVQ:vynce.app sender=@casey:vynce.app self=@casey:vynce.app hasOffer=false hasAnswer=false hasCandidates=true @ http://localhost:5173/src/contexts/CallContext.tsx:79
+[   62717ms] [LOG] [CallProvider] ICE candidates received: 10 @ http://localhost:5173/src/contexts/CallContext.tsx:119
+[   62717ms] [LOG] [CallProvider.Event] type=m.call.answer roomId=!MYfWbNnwKaiTYmEYVQ:vynce.app sender=@alex:vynce.app self=@casey:vynce.app hasOffer=false hasAnswer=true hasCandidates=false @ http://localhost:5173/src/contexts/CallContext.tsx:79
+[   62717ms] [LOG] [CallProvider] ANSWER received @ http://localhost:5173/src/contexts/CallContext.tsx:106
+[   62717ms] [LOG] [CallProvider.Event] type=m.call.candidates roomId=!MYfWbNnwKaiTYmEYVQ:vynce.app sender=@alex:vynce.app self=@casey:vynce.app hasOffer=false hasAnswer=false hasCandidates=true @ http://localhost:5173/src/contexts/CallContext.tsx:79
+[   62718ms] [LOG] [CallProvider] ICE candidates received: 10 @ http://localhost:5173/src/contexts/CallContext.tsx:119
+[   62718ms] [LOG] [CallProvider.Event] type=m.call.hangup roomId=!MYfWbNnwKaiTYmEYVQ:vynce.app sender=@alex:vynce.app self=@casey:vynce.app hasOffer=false hasAnswer=false hasCandidates=false @ http://localhost:5173/src/contexts/CallContext.tsx:79
+[   62718ms] [LOG] [CallProvider] HANGUP received @ http://localhost:5173/src/contexts/CallContext.tsx:115
+[   62718ms] [LOG] [CallProvider.Event] type=m.call.invite roomId=!MYfWbNnwKaiTYmEYVQ:vynce.app sender=@casey:vynce.app self=@casey:vynce.app hasOffer=true hasAnswer=false hasCandidates=false @ http://localhost:5173/src/contexts/CallContext.tsx:79
+[   62718ms] [LOG] [CallProvider] SKIP own invite @ http://localhost:5173/src/contexts/CallContext.tsx:84
+[   62718ms] [LOG] [CallProvider.Event] type=m.call.candidates roomId=!MYfWbNnwKaiTYmEYVQ:vynce.app sender=@casey:vynce.app self=@casey:vynce.app hasOffer=false hasAnswer=false hasCandidates=true @ http://localhost:5173/src/contexts/CallContext.tsx:79
+[   62718ms] [LOG] [CallProvider] ICE candidates received: 20 @ http://localhost:5173/src/contexts/CallContext.tsx:119
+[   62718ms] [LOG] [CallProvider.Event] type=m.call.answer roomId=!MYfWbNnwKaiTYmEYVQ:vynce.app sender=@alex:vynce.app self=@casey:vynce.app hasOffer=false hasAnswer=true hasCandidates=false @ http://localhost:5173/src/contexts/CallContext.tsx:79
+[   62718ms] [LOG] [CallProvider] ANSWER received @ http://localhost:5173/src/contexts/CallContext.tsx:106
+[   62718ms] [LOG] [CallProvider.Event] type=m.call.candidates roomId=!MYfWbNnwKaiTYmEYVQ:vynce.app sender=@alex:vynce.app self=@casey:vynce.app hasOffer=false hasAnswer=false hasCandidates=true @ http://localhost:5173/src/contexts/CallContext.tsx:79
+[   62718ms] [LOG] [CallProvider] ICE candidates received: 10 @ http://localhost:5173/src/contexts/CallContext.tsx:119
+[   62718ms] [LOG] [CallProvider.Event] type=m.call.hangup roomId=!MYfWbNnwKaiTYmEYVQ:vynce.app sender=@alex:vynce.app self=@casey:vynce.app hasOffer=false hasAnswer=false hasCandidates=false @ http://localhost:5173/src/contexts/CallContext.tsx:79
+[   62718ms] [LOG] [CallProvider] HANGUP received @ http://localhost:5173/src/contexts/CallContext.tsx:115
+[   62719ms] [LOG] [CallProvider.Event] type=m.call.invite roomId=!MYfWbNnwKaiTYmEYVQ:vynce.app sender=@casey:vynce.app self=@casey:vynce.app hasOffer=true hasAnswer=false hasCandidates=false @ http://localhost:5173/src/contexts/CallContext.tsx:79
+[   62719ms] [LOG] [CallProvider] SKIP own invite @ http://localhost:5173/src/contexts/CallContext.tsx:84
+[   62719ms] [LOG] [CallProvider.Event] type=m.call.candidates roomId=!MYfWbNnwKaiTYmEYVQ:vynce.app sender=@casey:vynce.app self=@casey:vynce.app hasOffer=false hasAnswer=false hasCandidates=true @ http://localhost:5173/src/contexts/CallContext.tsx:79
+[   62719ms] [LOG] [CallProvider] ICE candidates received: 20 @ http://localhost:5173/src/contexts/CallContext.tsx:119
+[   62719ms] [LOG] [CallProvider.Event] type=m.call.answer roomId=!MYfWbNnwKaiTYmEYVQ:vynce.app sender=@alex:vynce.app self=@casey:vynce.app hasOffer=false hasAnswer=true hasCandidates=false @ http://localhost:5173/src/contexts/CallContext.tsx:79
+[   62719ms] [LOG] [CallProvider] ANSWER received @ http://localhost:5173/src/contexts/CallContext.tsx:106
+[   62719ms] [LOG] [CallProvider.Event] type=m.call.candidates roomId=!MYfWbNnwKaiTYmEYVQ:vynce.app sender=@alex:vynce.app self=@casey:vynce.app hasOffer=false hasAnswer=false hasCandidates=true @ http://localhost:5173/src/contexts/CallContext.tsx:79
+[   62719ms] [LOG] [CallProvider] ICE candidates received: 10 @ http://localhost:5173/src/contexts/CallContext.tsx:119
+[   62719ms] [LOG] [CallProvider.Event] type=m.call.hangup roomId=!MYfWbNnwKaiTYmEYVQ:vynce.app sender=@alex:vynce.app self=@casey:vynce.app hasOffer=false hasAnswer=false hasCandidates=false @ http://localhost:5173/src/contexts/CallContext.tsx:79
+[   62719ms] [LOG] [CallProvider] HANGUP received @ http://localhost:5173/src/contexts/CallContext.tsx:115
+[   62719ms] [LOG] [CallProvider.Event] type=m.call.invite roomId=!MYfWbNnwKaiTYmEYVQ:vynce.app sender=@casey:vynce.app self=@casey:vynce.app hasOffer=true hasAnswer=false hasCandidates=false @ http://localhost:5173/src/contexts/CallContext.tsx:79
+[   62719ms] [LOG] [CallProvider] SKIP own invite @ http://localhost:5173/src/contexts/CallContext.tsx:84
+[   62719ms] [LOG] [CallProvider.Event] type=m.call.candidates roomId=!MYfWbNnwKaiTYmEYVQ:vynce.app sender=@casey:vynce.app self=@casey:vynce.app hasOffer=false hasAnswer=false hasCandidates=true @ http://localhost:5173/src/contexts/CallContext.tsx:79
+[   62719ms] [LOG] [CallProvider] ICE candidates received: 20 @ http://localhost:5173/src/contexts/CallContext.tsx:119
+[   62719ms] [LOG] [CallProvider.Event] type=m.call.answer roomId=!MYfWbNnwKaiTYmEYVQ:vynce.app sender=@alex:vynce.app self=@casey:vynce.app hasOffer=false hasAnswer=true hasCandidates=false @ http://localhost:5173/src/contexts/CallContext.tsx:79
+[   62719ms] [LOG] [CallProvider] ANSWER received @ http://localhost:5173/src/contexts/CallContext.tsx:106
+[   62719ms] [LOG] [CallProvider.Event] type=m.call.candidates roomId=!MYfWbNnwKaiTYmEYVQ:vynce.app sender=@alex:vynce.app self=@casey:vynce.app hasOffer=false hasAnswer=false hasCandidates=true @ http://localhost:5173/src/contexts/CallContext.tsx:79
+[   62720ms] [LOG] [CallProvider] ICE candidates received: 10 @ http://localhost:5173/src/contexts/CallContext.tsx:119
+[   62720ms] [LOG] [CallProvider.Event] type=m.call.hangup roomId=!MYfWbNnwKaiTYmEYVQ:vynce.app sender=@alex:vynce.app self=@casey:vynce.app hasOffer=false hasAnswer=false hasCandidates=false @ http://localhost:5173/src/contexts/CallContext.tsx:79
+[   62720ms] [LOG] [CallProvider] HANGUP received @ http://localhost:5173/src/contexts/CallContext.tsx:115
+[   62720ms] [LOG] [CallProvider.Event] type=m.call.invite roomId=!MYfWbNnwKaiTYmEYVQ:vynce.app sender=@casey:vynce.app self=@casey:vynce.app hasOffer=true hasAnswer=false hasCandidates=false @ http://localhost:5173/src/contexts/CallContext.tsx:79
+[   62720ms] [LOG] [CallProvider] SKIP own invite @ http://localhost:5173/src/contexts/CallContext.tsx:84
+[   62720ms] [LOG] [CallProvider.Event] type=m.call.candidates roomId=!MYfWbNnwKaiTYmEYVQ:vynce.app sender=@casey:vynce.app self=@casey:vynce.app hasOffer=false hasAnswer=false hasCandidates=true @ http://localhost:5173/src/contexts/CallContext.tsx:79
+[   62720ms] [LOG] [CallProvider] ICE candidates received: 16 @ http://localhost:5173/src/contexts/CallContext.tsx:119
+[   62720ms] [LOG] [CallProvider.Event] type=m.call.candidates roomId=!MYfWbNnwKaiTYmEYVQ:vynce.app sender=@casey:vynce.app self=@casey:vynce.app hasOffer=false hasAnswer=false hasCandidates=true @ http://localhost:5173/src/contexts/CallContext.tsx:79
+[   62720ms] [LOG] [CallProvider] ICE candidates received: 4 @ http://localhost:5173/src/contexts/CallContext.tsx:119
+[   62720ms] [LOG] [CallProvider.Event] type=m.call.answer roomId=!MYfWbNnwKaiTYmEYVQ:vynce.app sender=@alex:vynce.app self=@casey:vynce.app hasOffer=false hasAnswer=true hasCandidates=false @ http://localhost:5173/src/contexts/CallContext.tsx:79
+[   62720ms] [LOG] [CallProvider] ANSWER received @ http://localhost:5173/src/contexts/CallContext.tsx:106
+[   62720ms] [LOG] [CallProvider.Event] type=m.call.candidates roomId=!MYfWbNnwKaiTYmEYVQ:vynce.app sender=@alex:vynce.app self=@casey:vynce.app hasOffer=false hasAnswer=false hasCandidates=true @ http://localhost:5173/src/contexts/CallContext.tsx:79
+[   62721ms] [LOG] [CallProvider] ICE candidates received: 10 @ http://localhost:5173/src/contexts/CallContext.tsx:119
+[   62721ms] [LOG] [CallProvider.Event] type=m.call.hangup roomId=!MYfWbNnwKaiTYmEYVQ:vynce.app sender=@alex:vynce.app self=@casey:vynce.app hasOffer=false hasAnswer=false hasCandidates=false @ http://localhost:5173/src/contexts/CallContext.tsx:79
+[   62721ms] [LOG] [CallProvider] HANGUP received @ http://localhost:5173/src/contexts/CallContext.tsx:115
+[   62721ms] [LOG] [CallProvider.Event] type=m.call.invite roomId=!MYfWbNnwKaiTYmEYVQ:vynce.app sender=@casey:vynce.app self=@casey:vynce.app hasOffer=true hasAnswer=false hasCandidates=false @ http://localhost:5173/src/contexts/CallContext.tsx:79
+[   62721ms] [LOG] [CallProvider] SKIP own invite @ http://localhost:5173/src/contexts/CallContext.tsx:84
+[   62721ms] [LOG] [CallProvider.Event] type=m.call.candidates roomId=!MYfWbNnwKaiTYmEYVQ:vynce.app sender=@casey:vynce.app self=@casey:vynce.app hasOffer=false hasAnswer=false hasCandidates=true @ http://localhost:5173/src/contexts/CallContext.tsx:79
+[   62721ms] [LOG] [CallProvider] ICE candidates received: 20 @ http://localhost:5173/src/contexts/CallContext.tsx:119
+[   62721ms] [LOG] [CallProvider.Event] type=m.call.hangup roomId=!MYfWbNnwKaiTYmEYVQ:vynce.app sender=@casey:vynce.app self=@casey:vynce.app hasOffer=false hasAnswer=false hasCandidates=false @ http://localhost:5173/src/contexts/CallContext.tsx:79
+[   62721ms] [LOG] [CallProvider] HANGUP received @ http://localhost:5173/src/contexts/CallContext.tsx:115
+[   62721ms] [LOG] [CallProvider.Event] type=m.call.invite roomId=!MYfWbNnwKaiTYmEYVQ:vynce.app sender=@casey:vynce.app self=@casey:vynce.app hasOffer=true hasAnswer=false hasCandidates=false @ http://localhost:5173/src/contexts/CallContext.tsx:79
+[   62721ms] [LOG] [CallProvider] SKIP own invite @ http://localhost:5173/src/contexts/CallContext.tsx:84
+[   62721ms] [LOG] [CallProvider.Event] type=m.call.candidates roomId=!MYfWbNnwKaiTYmEYVQ:vynce.app sender=@casey:vynce.app self=@casey:vynce.app hasOffer=false hasAnswer=false hasCandidates=true @ http://localhost:5173/src/contexts/CallContext.tsx:79
+[   62721ms] [LOG] [CallProvider] ICE candidates received: 20 @ http://localhost:5173/src/contexts/CallContext.tsx:119
+[   62721ms] [LOG] [CallProvider.Event] type=m.call.hangup roomId=!MYfWbNnwKaiTYmEYVQ:vynce.app sender=@alex:vynce.app self=@casey:vynce.app hasOffer=false hasAnswer=false hasCandidates=false @ http://localhost:5173/src/contexts/CallContext.tsx:79
+[   62721ms] [LOG] [CallProvider] HANGUP received @ http://localhost:5173/src/contexts/CallContext.tsx:115
+[   62722ms] [LOG] [CallProvider.Event] type=m.call.invite roomId=!MYfWbNnwKaiTYmEYVQ:vynce.app sender=@casey:vynce.app self=@casey:vynce.app hasOffer=true hasAnswer=false hasCandidates=false @ http://localhost:5173/src/contexts/CallContext.tsx:79
+[   62722ms] [LOG] [CallProvider] SKIP own invite @ http://localhost:5173/src/contexts/CallContext.tsx:84
+[   62722ms] [LOG] [CallProvider.Event] type=m.call.candidates roomId=!MYfWbNnwKaiTYmEYVQ:vynce.app sender=@casey:vynce.app self=@casey:vynce.app hasOffer=false hasAnswer=false hasCandidates=true @ http://localhost:5173/src/contexts/CallContext.tsx:79
+[   62722ms] [LOG] [CallProvider] ICE candidates received: 20 @ http://localhost:5173/src/contexts/CallContext.tsx:119
+[   62722ms] [LOG] [CallProvider.Event] type=m.call.hangup roomId=!MYfWbNnwKaiTYmEYVQ:vynce.app sender=@casey:vynce.app self=@casey:vynce.app hasOffer=false hasAnswer=false hasCandidates=false @ http://localhost:5173/src/contexts/CallContext.tsx:79
+[   62722ms] [LOG] [CallProvider] HANGUP received @ http://localhost:5173/src/contexts/CallContext.tsx:115
+[   62722ms] [LOG] [CallProvider.Event] type=m.call.invite roomId=!MYfWbNnwKaiTYmEYVQ:vynce.app sender=@casey:vynce.app self=@casey:vynce.app hasOffer=true hasAnswer=false hasCandidates=false @ http://localhost:5173/src/contexts/CallContext.tsx:79
+[   62722ms] [LOG] [CallProvider] SKIP own invite @ http://localhost:5173/src/contexts/CallContext.tsx:84
+[   62722ms] [LOG] [CallProvider.Event] type=m.call.candidates roomId=!MYfWbNnwKaiTYmEYVQ:vynce.app sender=@casey:vynce.app self=@casey:vynce.app hasOffer=false hasAnswer=false hasCandidates=true @ http://localhost:5173/src/contexts/CallContext.tsx:79
+[   62722ms] [LOG] [CallProvider] ICE candidates received: 20 @ http://localhost:5173/src/contexts/CallContext.tsx:119
+[   62722ms] [LOG] [CallProvider.Event] type=m.call.hangup roomId=!MYfWbNnwKaiTYmEYVQ:vynce.app sender=@casey:vynce.app self=@casey:vynce.app hasOffer=false hasAnswer=false hasCandidates=false @ http://localhost:5173/src/contexts/CallContext.tsx:79
+[   62722ms] [LOG] [CallProvider] HANGUP received @ http://localhost:5173/src/contexts/CallContext.tsx:115
+[   62722ms] [LOG] [CallProvider.Event] type=m.call.invite roomId=!MYfWbNnwKaiTYmEYVQ:vynce.app sender=@alex:vynce.app self=@casey:vynce.app hasOffer=true hasAnswer=false hasCandidates=false @ http://localhost:5173/src/contexts/CallContext.tsx:79
+[   62722ms] [LOG] [CallProvider] INVITE received — setting incomingCall + ringing state @ http://localhost:5173/src/contexts/CallContext.tsx:87
+[   62722ms] [LOG] [CallProvider] State set — CallOverlay should render now @ http://localhost:5173/src/contexts/CallContext.tsx:103
+[   62722ms] [LOG] [CallProvider.Event] type=m.call.candidates roomId=!MYfWbNnwKaiTYmEYVQ:vynce.app sender=@alex:vynce.app self=@casey:vynce.app hasOffer=false hasAnswer=false hasCandidates=true @ http://localhost:5173/src/contexts/CallContext.tsx:79
+[   62723ms] [LOG] [CallProvider] ICE candidates received: 20 @ http://localhost:5173/src/contexts/CallContext.tsx:119
+[   62723ms] [LOG] [CallProvider.Event] type=m.call.hangup roomId=!MYfWbNnwKaiTYmEYVQ:vynce.app sender=@alex:vynce.app self=@casey:vynce.app hasOffer=false hasAnswer=false hasCandidates=false @ http://localhost:5173/src/contexts/CallContext.tsx:79
+[   62723ms] [LOG] [CallProvider] HANGUP received @ http://localhost:5173/src/contexts/CallContext.tsx:115
+[   62723ms] [LOG] [CallProvider.Event] type=m.call.invite roomId=!MYfWbNnwKaiTYmEYVQ:vynce.app sender=@alex:vynce.app self=@casey:vynce.app hasOffer=true hasAnswer=false hasCandidates=false @ http://localhost:5173/src/contexts/CallContext.tsx:79
+[   62723ms] [LOG] [CallProvider] INVITE received — setting incomingCall + ringing state @ http://localhost:5173/src/contexts/CallContext.tsx:87
+[   62723ms] [LOG] [CallProvider] State set — CallOverlay should render now @ http://localhost:5173/src/contexts/CallContext.tsx:103
+[   62723ms] [LOG] [CallProvider.Event] type=m.call.candidates roomId=!MYfWbNnwKaiTYmEYVQ:vynce.app sender=@alex:vynce.app self=@casey:vynce.app hasOffer=false hasAnswer=false hasCandidates=true @ http://localhost:5173/src/contexts/CallContext.tsx:79
+[   62723ms] [LOG] [CallProvider] ICE candidates received: 10 @ http://localhost:5173/src/contexts/CallContext.tsx:119
+[   62723ms] [LOG] [CallProvider.Event] type=m.call.answer roomId=!MYfWbNnwKaiTYmEYVQ:vynce.app sender=@casey:vynce.app self=@casey:vynce.app hasOffer=false hasAnswer=true hasCandidates=false @ http://localhost:5173/src/contexts/CallContext.tsx:79
+[   62723ms] [LOG] [CallProvider] ANSWER received @ http://localhost:5173/src/contexts/CallContext.tsx:106
+[   62723ms] [LOG] [CallProvider.Event] type=m.call.candidates roomId=!MYfWbNnwKaiTYmEYVQ:vynce.app sender=@casey:vynce.app self=@casey:vynce.app hasOffer=false hasAnswer=false hasCandidates=true @ http://localhost:5173/src/contexts/CallContext.tsx:79
+[   62723ms] [LOG] [CallProvider] ICE candidates received: 8 @ http://localhost:5173/src/contexts/CallContext.tsx:119
+[   62723ms] [LOG] [CallProvider.Event] type=m.call.hangup roomId=!MYfWbNnwKaiTYmEYVQ:vynce.app sender=@casey:vynce.app self=@casey:vynce.app hasOffer=false hasAnswer=false hasCandidates=false @ http://localhost:5173/src/contexts/CallContext.tsx:79
+[   62723ms] [LOG] [CallProvider] HANGUP received @ http://localhost:5173/src/contexts/CallContext.tsx:115
+[   62723ms] [LOG] [CallProvider.Event] type=m.call.invite roomId=!MYfWbNnwKaiTYmEYVQ:vynce.app sender=@casey:vynce.app self=@casey:vynce.app hasOffer=true hasAnswer=false hasCandidates=false @ http://localhost:5173/src/contexts/CallContext.tsx:79
+[   62723ms] [LOG] [CallProvider] SKIP own invite @ http://localhost:5173/src/contexts/CallContext.tsx:84
+[   62723ms] [LOG] [CallProvider.Event] type=m.call.candidates roomId=!MYfWbNnwKaiTYmEYVQ:vynce.app sender=@casey:vynce.app self=@casey:vynce.app hasOffer=false hasAnswer=false hasCandidates=true @ http://localhost:5173/src/contexts/CallContext.tsx:79
+[   62724ms] [LOG] [CallProvider] ICE candidates received: 10 @ http://localhost:5173/src/contexts/CallContext.tsx:119
+[   62724ms] [LOG] [CallProvider.Event] type=m.call.hangup roomId=!MYfWbNnwKaiTYmEYVQ:vynce.app sender=@casey:vynce.app self=@casey:vynce.app hasOffer=false hasAnswer=false hasCandidates=false @ http://localhost:5173/src/contexts/CallContext.tsx:79
+[   62724ms] [LOG] [CallProvider] HANGUP received @ http://localhost:5173/src/contexts/CallContext.tsx:115
+[   62724ms] [LOG] [CallProvider.Event] type=m.call.invite roomId=!MYfWbNnwKaiTYmEYVQ:vynce.app sender=@casey:vynce.app self=@casey:vynce.app hasOffer=true hasAnswer=false hasCandidates=false @ http://localhost:5173/src/contexts/CallContext.tsx:79
+[   62724ms] [LOG] [CallProvider] SKIP own invite @ http://localhost:5173/src/contexts/CallContext.tsx:84
+[   62724ms] [LOG] [CallProvider.Event] type=m.call.candidates roomId=!MYfWbNnwKaiTYmEYVQ:vynce.app sender=@casey:vynce.app self=@casey:vynce.app hasOffer=false hasAnswer=false hasCandidates=true @ http://localhost:5173/src/contexts/CallContext.tsx:79
+[   62724ms] [LOG] [CallProvider] ICE candidates received: 8 @ http://localhost:5173/src/contexts/CallContext.tsx:119
+[   62724ms] [LOG] [CallProvider.Event] type=m.call.candidates roomId=!MYfWbNnwKaiTYmEYVQ:vynce.app sender=@casey:vynce.app self=@casey:vynce.app hasOffer=false hasAnswer=false hasCandidates=true @ http://localhost:5173/src/contexts/CallContext.tsx:79
+[   62724ms] [LOG] [CallProvider] ICE candidates received: 2 @ http://localhost:5173/src/contexts/CallContext.tsx:119
+[   62724ms] [LOG] [CallProvider.Event] type=m.call.hangup roomId=!MYfWbNnwKaiTYmEYVQ:vynce.app sender=@casey:vynce.app self=@casey:vynce.app hasOffer=false hasAnswer=false hasCandidates=false @ http://localhost:5173/src/contexts/CallContext.tsx:79
+[   62724ms] [LOG] [CallProvider] HANGUP received @ http://localhost:5173/src/contexts/CallContext.tsx:115
+[   62724ms] [LOG] [CallProvider.Event] type=m.call.invite roomId=!MYfWbNnwKaiTYmEYVQ:vynce.app sender=@casey:vynce.app self=@casey:vynce.app hasOffer=true hasAnswer=false hasCandidates=false @ http://localhost:5173/src/contexts/CallContext.tsx:79
+[   62724ms] [LOG] [CallProvider] SKIP own invite @ http://localhost:5173/src/contexts/CallContext.tsx:84
+[   62724ms] [LOG] [CallProvider.Event] type=m.call.candidates roomId=!MYfWbNnwKaiTYmEYVQ:vynce.app sender=@casey:vynce.app self=@casey:vynce.app hasOffer=false hasAnswer=false hasCandidates=true @ http://localhost:5173/src/contexts/CallContext.tsx:79
+[   62724ms] [LOG] [CallProvider] ICE candidates received: 8 @ http://localhost:5173/src/contexts/CallContext.tsx:119
+[   62724ms] [LOG] [CallProvider.Event] type=m.call.candidates roomId=!MYfWbNnwKaiTYmEYVQ:vynce.app sender=@casey:vynce.app self=@casey:vynce.app hasOffer=false hasAnswer=false hasCandidates=true @ http://localhost:5173/src/contexts/CallContext.tsx:79
+[   62725ms] [LOG] [CallProvider] ICE candidates received: 2 @ http://localhost:5173/src/contexts/CallContext.tsx:119
+[   62725ms] [LOG] [CallProvider.Event] type=m.call.answer roomId=!MYfWbNnwKaiTYmEYVQ:vynce.app sender=@alex:vynce.app self=@casey:vynce.app hasOffer=false hasAnswer=true hasCandidates=false @ http://localhost:5173/src/contexts/CallContext.tsx:79
+[   62725ms] [LOG] [CallProvider] ANSWER received @ http://localhost:5173/src/contexts/CallContext.tsx:106
+[   62725ms] [LOG] [CallProvider.Event] type=m.call.candidates roomId=!MYfWbNnwKaiTYmEYVQ:vynce.app sender=@alex:vynce.app self=@casey:vynce.app hasOffer=false hasAnswer=false hasCandidates=true @ http://localhost:5173/src/contexts/CallContext.tsx:79
+[   62725ms] [LOG] [CallProvider] ICE candidates received: 10 @ http://localhost:5173/src/contexts/CallContext.tsx:119
+[   62725ms] [LOG] [CallProvider.Event] type=m.call.hangup roomId=!MYfWbNnwKaiTYmEYVQ:vynce.app sender=@casey:vynce.app self=@casey:vynce.app hasOffer=false hasAnswer=false hasCandidates=false @ http://localhost:5173/src/contexts/CallContext.tsx:79
+[   62725ms] [LOG] [CallProvider] HANGUP received @ http://localhost:5173/src/contexts/CallContext.tsx:115
+[   62728ms] [INFO] Resuming queue after resumed sync @ http://localhost:5173/node_modules/.vite/deps/indexeddb-crypto-store-CTWeDihb.js?v=79e580e1:7825
+[   62729ms] [LOG] [CallProvider] Matrix client ready, sync status: SYNCING @ http://localhost:5173/src/contexts/CallContext.tsx:141
+[   62729ms] [LOG] [CallProvider] Rooms on sync: 1 [!MYfWbNnwKaiTYmEYVQ:vynce.app] @ http://localhost:5173/src/contexts/CallContext.tsx:143
+[   62897ms] [WARNING] [socket] connection error: unauthorized @ http://localhost:5173/src/api/socket.ts:22

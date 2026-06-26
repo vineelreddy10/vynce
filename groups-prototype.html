@@ -1,0 +1,1019 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Vynce Groups — Design Prototype</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@600;700;800;900&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Inter', sans-serif;
+    background: #f0f1f2;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    padding: 32px;
+    justify-content: center;
+    align-items: flex-start;
+  }
+
+  .phone {
+    width: 390px;
+    background: #f8f9fa;
+    border-radius: 40px;
+    overflow: hidden;
+    box-shadow: 0 25px 60px rgba(0,0,0,0.15);
+    position: relative;
+    min-height: 700px;
+  }
+  .phone-inner {
+    padding: 20px;
+  }
+
+  /* Vynce Design Tokens */
+  :root {
+    --coral: #ff5f6d;
+    --orange: #ff8a5c;
+    --navy: #1a1c2e;
+    --teal: #20c997;
+    --bg: #f8f9fa;
+    --card: #ffffff;
+    --border: #e9ecef;
+    --muted: #868e96;
+    --surface: #f1f3f5;
+    --gradient: linear-gradient(135deg, #ff5f6d, #ff8a5c);
+  }
+
+  /* Header */
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 4px 0 16px;
+  }
+  .header h1 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--navy);
+  }
+  .header .create-btn {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: var(--gradient);
+    border: none;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(255,95,109,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .back-btn {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: white;
+    border: 1px solid var(--border);
+    color: var(--navy);
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Categories Filter */
+  .categories {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding: 4px 0 16px;
+    scrollbar-width: none;
+  }
+  .categories::-webkit-scrollbar { display: none; }
+  .cat-chip {
+    white-space: nowrap;
+    padding: 8px 16px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: white;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--muted);
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .cat-chip.active {
+    background: var(--gradient);
+    color: white;
+    border-color: transparent;
+    box-shadow: 0 4px 12px rgba(255,95,109,0.3);
+  }
+
+  /* Group Card */
+  .group-card {
+    background: white;
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    overflow: hidden;
+    margin-bottom: 12px;
+    cursor: pointer;
+    transition: box-shadow 0.2s;
+  }
+  .group-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.06); }
+  .group-card-cover {
+    width: 100%;
+    height: 120px;
+    object-fit: cover;
+    background: var(--gradient);
+  }
+  .group-card-body { padding: 12px 16px; }
+  .group-card-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--navy);
+  }
+  .group-card-meta {
+    display: flex;
+    gap: 16px;
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+  .group-card-desc {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 8px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .group-card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 16px 12px;
+  }
+  .group-card-cat {
+    font-size: 10px;
+    background: var(--surface);
+    padding: 4px 10px;
+    border-radius: 12px;
+    color: var(--navy);
+    font-weight: 500;
+  }
+  .join-btn {
+    padding: 8px 20px;
+    border-radius: 20px;
+    border: none;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .join-btn.primary { background: var(--gradient); color: white; box-shadow: 0 4px 12px rgba(255,95,109,0.3); }
+  .join-btn.outline { background: white; color: var(--navy); border: 1px solid var(--border); }
+
+  /* Section Title */
+  .section-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--navy);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin: 20px 0 12px;
+  }
+
+  /* Tab Bar */
+  .tabs {
+    display: flex;
+    border-bottom: 2px solid var(--border);
+    margin: 12px 0 16px;
+  }
+  .tab {
+    flex: 1;
+    padding: 10px 0;
+    text-align: center;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--muted);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px;
+    font-family: 'Inter', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .tab.active { color: var(--coral); border-bottom-color: var(--coral); }
+
+  /* Feed Post */
+  .feed-post {
+    background: white;
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    padding: 16px;
+    margin-bottom: 12px;
+  }
+  .post-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .post-avatar {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: var(--gradient);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 700;
+    font-size: 14px;
+  }
+  .post-name { font-weight: 600; font-size: 13px; color: var(--navy); }
+  .post-time { font-size: 11px; color: var(--muted); }
+  .post-text { font-size: 13px; color: #333; line-height: 1.5; }
+  .post-image {
+    width: 100%;
+    border-radius: 12px;
+    margin-top: 10px;
+  }
+  .post-actions {
+    display: flex;
+    gap: 20px;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid var(--border);
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .post-actions span { cursor: pointer; display: flex; align-items: center; gap: 4px; }
+
+  /* Members Grid */
+  .member-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .member-avatar {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    color: white;
+    font-size: 16px;
+  }
+  .member-info { flex: 1; }
+  .member-name { font-size: 14px; font-weight: 600; color: var(--navy); }
+  .member-role { font-size: 11px; color: var(--muted); }
+  .role-badge {
+    font-size: 10px;
+    padding: 3px 8px;
+    border-radius: 8px;
+    font-weight: 600;
+  }
+  .role-badge.admin { background: #fff3e0; color: #e65100; }
+  .role-badge.member { background: #e8f5e9; color: #2e7d32; }
+  .match-request-btn {
+    padding: 6px 14px;
+    border-radius: 16px;
+    border: 1px solid var(--coral);
+    background: white;
+    color: var(--coral);
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+  }
+
+  /* Join Requests */
+  .request-card {
+    background: white;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    padding: 12px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .request-actions {
+    display: flex;
+    gap: 8px;
+    margin-left: auto;
+  }
+  .approve-btn, .reject-btn {
+    padding: 6px 14px;
+    border-radius: 16px;
+    border: none;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+  }
+  .approve-btn { background: var(--gradient); color: white; }
+  .reject-btn { background: var(--surface); color: var(--navy); border: 1px solid var(--border); }
+
+  /* Create Group Form */
+  .form-group { margin-bottom: 16px; }
+  .form-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--navy);
+    margin-bottom: 6px;
+    display: block;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .form-input, .form-textarea {
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    font-size: 14px;
+    font-family: 'Inter', sans-serif;
+    background: white;
+  }
+  .form-textarea { min-height: 80px; resize: vertical; }
+  .cover-upload {
+    width: 100%;
+    height: 140px;
+    border-radius: 12px;
+    border: 2px dashed var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--muted);
+    font-size: 13px;
+    cursor: pointer;
+    background: var(--surface);
+  }
+  .toggle-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 0;
+  }
+  .toggle {
+    width: 48px; height: 28px;
+    border-radius: 14px;
+    background: #ccc;
+    cursor: pointer;
+    position: relative;
+    transition: background 0.2s;
+  }
+  .toggle.on { background: var(--teal); }
+  .toggle::after {
+    content: '';
+    position: absolute;
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: white;
+    top: 3px; left: 3px;
+    transition: left 0.2s;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+  }
+  .toggle.on::after { left: 23px; }
+
+  .submit-btn {
+    width: 100%;
+    padding: 14px;
+    border-radius: 28px;
+    border: none;
+    background: var(--gradient);
+    color: white;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    box-shadow: 0 6px 20px rgba(255,95,109,0.3);
+    margin-top: 8px;
+  }
+
+  /* Create Post */
+  .create-post {
+    background: white;
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    padding: 12px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .create-post-input {
+    flex: 1;
+    border: none;
+    font-size: 13px;
+    font-family: 'Inter', sans-serif;
+    color: var(--navy);
+    outline: none;
+  }
+  .create-post-input::placeholder { color: var(--muted); }
+  .create-post-btn {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: var(--gradient);
+    border: none;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Badge */
+  .badge {
+    background: var(--coral);
+    color: white;
+    font-size: 10px;
+    padding: 2px 7px;
+    border-radius: 10px;
+    font-weight: 700;
+  }
+
+  /* Admin Controls */
+  .admin-actions {
+    display: flex;
+    gap: 8px;
+    margin: 12px 0;
+  }
+  .admin-action-btn {
+    flex: 1;
+    padding: 8px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: white;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    color: var(--navy);
+    text-align: center;
+  }
+
+  /* Label */
+  .screen-label {
+    text-align: center;
+    padding: 16px 0 4px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    border-top: 1px solid var(--border);
+    margin-top: 16px;
+  }
+  .screen-label:first-child { border-top: none; margin-top: 0; }
+</style>
+</head>
+<body>
+
+<!-- ============ SCREEN 1: Browse Groups ============ -->
+<div class="phone">
+  <div class="screen-label">01 · Browse Groups</div>
+  <div class="phone-inner">
+    <div class="header">
+      <h1>Browse Groups</h1>
+      <button class="create-btn">+</button>
+    </div>
+
+    <div class="categories">
+      <span class="cat-chip active">All</span>
+      <span class="cat-chip">Food &amp; Drink</span>
+      <span class="cat-chip">Outdoors</span>
+      <span class="cat-chip">Arts</span>
+      <span class="cat-chip">Tech</span>
+      <span class="cat-chip">Books</span>
+      <span class="cat-chip">Wellness</span>
+    </div>
+
+    <!-- Group Card 1 -->
+    <div class="group-card">
+      <div class="group-card-cover" style="background: linear-gradient(135deg, #667eea, #764ba2);"></div>
+      <div class="group-card-body">
+        <div class="group-card-title">Photography Walks NYC</div>
+        <div class="group-card-meta">
+          <span>👥 342 members</span>
+          <span>📍 New York, NY</span>
+        </div>
+        <div class="group-card-desc">Weekly photography walks across NYC. All skill levels welcome — just bring your camera!</div>
+      </div>
+      <div class="group-card-footer">
+        <span class="group-card-cat">Outdoors</span>
+        <button class="join-btn primary">Join</button>
+      </div>
+    </div>
+
+    <!-- Group Card 2 (Member - shows Leave) -->
+    <div class="group-card">
+      <div class="group-card-cover" style="background: linear-gradient(135deg, #f093fb, #f5576c);"></div>
+      <div class="group-card-body">
+        <div class="group-card-title">Tech Founders Club</div>
+        <div class="group-card-meta">
+          <span>👥 128 members</span>
+          <span>📍 San Francisco, CA</span>
+        </div>
+        <div class="group-card-desc">Connect with fellow founders and tech enthusiasts. Monthly meetups, guest speakers, and networking.</div>
+      </div>
+      <div class="group-card-footer">
+        <span class="group-card-cat">Tech</span>
+        <button class="join-btn outline">✔ Member</button>
+      </div>
+    </div>
+
+    <!-- Group Card 3 -->
+    <div class="group-card">
+      <div class="group-card-cover" style="background: linear-gradient(135deg, #4facfe, #00f2fe);"></div>
+      <div class="group-card-body">
+        <div class="group-card-title">Sunset Yoga Club</div>
+        <div class="group-card-meta">
+          <span>👥 89 members</span>
+          <span>📍 Los Angeles, CA</span>
+        </div>
+        <div class="group-card-desc">Evening yoga sessions at parks across LA. Bring your mat and good vibes.</div>
+      </div>
+      <div class="group-card-footer">
+        <span class="group-card-cat">Wellness</span>
+        <button class="join-btn primary">Join</button>
+      </div>
+    </div>
+
+    <!-- Group Card 4 (Private - shows lock) -->
+    <div class="group-card">
+      <div class="group-card-cover" style="background: linear-gradient(135deg, #a18cd1, #fbc2eb);"></div>
+      <div class="group-card-body">
+        <div class="group-card-title">🔒 Book Lovers Society</div>
+        <div class="group-card-meta">
+          <span>👥 56 members</span>
+          <span>📍 Chicago, IL</span>
+        </div>
+        <div class="group-card-desc">Monthly book club meeting virtually and in-person. This month: "Project Hail Mary".</div>
+      </div>
+      <div class="group-card-footer">
+        <span class="group-card-cat">Books</span>
+        <button class="join-btn primary">Request</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SCREEN 2: Create Group ============ -->
+<div class="phone">
+  <div class="screen-label">02 · Create Group</div>
+  <div class="phone-inner">
+    <div class="header">
+      <button class="back-btn">←</button>
+      <h1 style="font-size:18px;">Create Group</h1>
+      <div style="width:32px;"></div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Cover Photo</label>
+      <div class="cover-upload">📷 Tap to upload cover image</div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Group Name</label>
+      <input class="form-input" type="text" placeholder="e.g., Hiking Adventures" />
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Description</label>
+      <textarea class="form-textarea" placeholder="What's this group about?"></textarea>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Category</label>
+      <select class="form-input" style="appearance: auto;">
+        <option>Select a category</option>
+        <option>Food &amp; Drink</option>
+        <option>Outdoors</option>
+        <option>Arts</option>
+        <option>Tech</option>
+        <option>Books</option>
+        <option>Wellness</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Location</label>
+      <input class="form-input" type="text" placeholder="City, State" />
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Privacy</label>
+      <div class="toggle-row">
+        <div>
+          <div style="font-size:14px;font-weight:600;color:var(--navy);">Private Group</div>
+          <div style="font-size:11px;color:var(--muted);">Members must request to join</div>
+        </div>
+        <div class="toggle on"></div>
+      </div>
+    </div>
+
+    <button class="submit-btn">Create Group</button>
+  </div>
+</div>
+
+<!-- ============ SCREEN 3: Group Detail — Member View ============ -->
+<div class="phone">
+  <div class="screen-label">03 · Group Detail (Member)</div>
+  <div style="position:relative;">
+    <div style="width:100%;height:180px;background:linear-gradient(135deg,#667eea,#764ba2);"></div>
+    <div style="position:absolute;top:12px;left:12px;">
+      <button class="back-btn" style="background:rgba(255,255,255,0.25);border-color:rgba(255,255,255,0.3);color:white;">←</button>
+    </div>
+    <div style="position:absolute;bottom:-24px;left:20px;display:flex;gap:4px;">
+      <div style="width:48px;height:48px;border-radius:50%;border:3px solid white;background:linear-gradient(135deg,#667eea,#764ba2);display:flex;align-items:center;justify-content:center;color:white;font-weight:700;">P</div>
+      <div style="width:48px;height:48px;border-radius:50%;border:3px solid white;background:linear-gradient(135deg,#f093fb,#f5576c);display:flex;align-items:center;justify-content:center;color:white;font-weight:700;">J</div>
+      <div style="width:48px;height:48px;border-radius:50%;border:3px solid white;background:linear-gradient(135deg,#4facfe,#00f2fe);display:flex;align-items:center;justify-content:center;color:white;font-weight:700;">M</div>
+      <div style="width:48px;height:48px;border-radius:50%;border:3px solid white;background:var(--muted);display:flex;align-items:center;justify-content:center;color:white;font-size:14px;font-weight:700;">+12</div>
+    </div>
+  </div>
+
+  <div class="phone-inner" style="padding-top:36px;">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+      <div>
+        <h2 style="font-family:'Montserrat',sans-serif;font-size:20px;color:var(--navy);">Photography Walks NYC</h2>
+        <p style="font-size:12px;color:var(--muted);margin-top:2px;">👥 342 members · 📍 New York, NY</p>
+      </div>
+      <button class="join-btn outline" style="padding:8px 16px;">✔ Member</button>
+    </div>
+
+    <p style="font-size:13px;color:#555;margin:12px 0;line-height:1.5;">
+      Weekly photography walks across NYC. All skill levels welcome — just bring your camera and a sense of adventure!
+    </p>
+
+    <div class="tabs">
+      <div class="tab active">Feed</div>
+      <div class="tab">Members</div>
+      <div class="tab">Events</div>
+      <div class="tab">About</div>
+    </div>
+
+    <!-- Create Post -->
+    <div class="create-post">
+      <div class="post-avatar" style="width:32px;height:32px;font-size:12px;flex-shrink:0;">C</div>
+      <input class="create-post-input" placeholder="Share something with the group..." />
+      <button class="create-post-btn">📷</button>
+    </div>
+
+    <!-- Feed Post 1 -->
+    <div class="feed-post">
+      <div class="post-header">
+        <div class="post-avatar">J</div>
+        <div>
+          <div class="post-name">Jessica Chen</div>
+          <div class="post-time">2 hours ago</div>
+        </div>
+      </div>
+      <div class="post-text">Great sunrise shoot at Brooklyn Bridge this morning! Who's in for next Saturday?</div>
+      <img class="post-image" src="data:image/svg+xml,%3Csvg width='340' height='180' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='340' height='180' fill='%23e9ecef'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dy='.3em' fill='%23868e96' font-size='14' font-family='Inter'%3E🖼 Brooklyn Bridge Sunrise%3C/text%3E%3C/svg%3E" alt="Sunrise photo" />
+      <div class="post-actions">
+        <span>❤️ 24</span>
+        <span>💬 8</span>
+      </div>
+    </div>
+
+    <!-- Feed Post 2 -->
+    <div class="feed-post">
+      <div class="post-header">
+        <div class="post-avatar" style="background:linear-gradient(135deg,#4facfe,#00f2fe);">M</div>
+        <div>
+          <div class="post-name">Mike Torres</div>
+          <div class="post-time">Yesterday</div>
+        </div>
+      </div>
+      <div class="post-text">📸 Just posted my Central Park collection. Critique welcome!</div>
+      <div class="post-actions">
+        <span>❤️ 18</span>
+        <span>💬 5</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SCREEN 4: Group Detail — Admin View ============ -->
+<div class="phone">
+  <div class="screen-label">04 · Group Detail (Admin)</div>
+  <div style="position:relative;">
+    <div style="width:100%;height:180px;background:linear-gradient(135deg,#f093fb,#f5576c);"></div>
+    <div style="position:absolute;top:12px;left:12px;">
+      <button class="back-btn" style="background:rgba(255,255,255,0.25);border-color:rgba(255,255,255,0.3);color:white;">←</button>
+    </div>
+    <div style="position:absolute;top:12px;right:12px;display:flex;gap:8px;">
+      <span class="badge" style="font-size:12px;padding:4px 12px;">👑 Admin</span>
+    </div>
+  </div>
+
+  <div class="phone-inner" style="padding-top:20px;">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+      <div>
+        <h2 style="font-family:'Montserrat',sans-serif;font-size:20px;color:var(--navy);">Tech Founders Club</h2>
+        <p style="font-size:12px;color:var(--muted);margin-top:2px;">👥 128 members · 📍 San Francisco, CA</p>
+      </div>
+    </div>
+
+    <!-- Admin Control Bar -->
+    <div class="admin-actions">
+      <div class="admin-action-btn">✏️ Edit Group</div>
+      <div class="admin-action-btn">🔔 Requests <span class="badge" style="margin-left:4px;">3</span></div>
+      <div class="admin-action-btn">⚙️ Settings</div>
+    </div>
+
+    <div class="tabs">
+      <div class="tab active">Feed</div>
+      <div class="tab">Members</div>
+      <div class="tab">Requests <span class="badge" style="margin-left:4px;">3</span></div>
+      <div class="tab">About</div>
+    </div>
+
+    <!-- Create Post (admin) -->
+    <div class="create-post">
+      <div class="post-avatar" style="width:32px;height:32px;font-size:12px;flex-shrink:0;">C</div>
+      <input class="create-post-input" placeholder="Share an update..." />
+      <button class="create-post-btn">📷</button>
+    </div>
+
+    <!-- Feed Post -->
+    <div class="feed-post">
+      <div class="post-header">
+        <div class="post-avatar" style="background:var(--teal);">A</div>
+        <div>
+          <div class="post-name">Alex Rivera <span class="role-badge admin" style="margin-left:4px;">Admin</span></div>
+          <div class="post-time">3 hours ago</div>
+        </div>
+      </div>
+      <div class="post-text">🚀 Next meetup: AI in SaaS — guest speaker from OpenAI confirmed! RSVP below.</div>
+      <div class="post-actions">
+        <span>❤️ 31</span>
+        <span>💬 12</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SCREEN 5: Join Requests ============ -->
+<div class="phone">
+  <div class="screen-label">05 · Join Requests (Admin)</div>
+  <div class="phone-inner">
+    <div class="header">
+      <button class="back-btn">←</button>
+      <h1 style="font-size:18px;">Join Requests</h1>
+      <span class="badge">3 pending</span>
+    </div>
+
+    <div class="section-title">Pending Requests</div>
+
+    <div class="request-card">
+      <div class="member-avatar" style="background:linear-gradient(135deg,#667eea,#764ba2);width:40px;height:40px;font-size:14px;flex-shrink:0;">S</div>
+      <div>
+        <div class="member-name" style="font-size:13px;">Sarah Williams</div>
+        <div style="font-size:11px;color:var(--muted);">2 mutual interests · Sarah@...</div>
+      </div>
+      <div class="request-actions">
+        <button class="reject-btn">✕</button>
+        <button class="approve-btn">✓</button>
+      </div>
+    </div>
+
+    <div class="request-card">
+      <div class="member-avatar" style="background:linear-gradient(135deg,#4facfe,#00f2fe);width:40px;height:40px;font-size:14px;flex-shrink:0;">D</div>
+      <div>
+        <div class="member-name" style="font-size:13px;">David Park</div>
+        <div style="font-size:11px;color:var(--muted);">5 mutual interests · Engineer</div>
+      </div>
+      <div class="request-actions">
+        <button class="reject-btn">✕</button>
+        <button class="approve-btn">✓</button>
+      </div>
+    </div>
+
+    <div class="request-card">
+      <div class="member-avatar" style="background:linear-gradient(135deg,#f093fb,#f5576c);width:40px;height:40px;font-size:14px;flex-shrink:0;">E</div>
+      <div>
+        <div class="member-name" style="font-size:13px;">Emma Johnson</div>
+        <div style="font-size:11px;color:var(--muted);">1 mutual interest · Designer</div>
+      </div>
+      <div class="request-actions">
+        <button class="reject-btn">✕</button>
+        <button class="approve-btn">✓</button>
+      </div>
+    </div>
+
+    <div class="section-title" style="margin-top:24px;">Approved Recently</div>
+
+    <div class="request-card" style="opacity:0.6;">
+      <div class="member-avatar" style="background:linear-gradient(135deg,#a18cd1,#fbc2eb);width:40px;height:40px;font-size:14px;flex-shrink:0;">T</div>
+      <div>
+        <div class="member-name" style="font-size:13px;">Tom Baker</div>
+        <div style="font-size:11px;color:var(--muted);">Approved 2 days ago</div>
+      </div>
+      <span style="font-size:11px;color:var(--teal);font-weight:600;">✓ Approved</span>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SCREEN 6: Members List ============ -->
+<div class="phone">
+  <div class="screen-label">06 · Members (Admin View)</div>
+  <div class="phone-inner">
+    <div class="header">
+      <button class="back-btn">←</button>
+      <h1 style="font-size:18px;">Members</h1>
+      <span style="font-size:12px;color:var(--muted);">128 total</span>
+    </div>
+
+    <input class="form-input" type="text" placeholder="🔍 Search members..." style="margin-bottom:12px;" />
+
+    <!-- Admin -->
+    <div class="member-row">
+      <div class="member-avatar" style="background:var(--gradient);">A</div>
+      <div class="member-info">
+        <div class="member-name">Alex Rivera <span class="role-badge admin">Admin</span></div>
+        <div class="member-role">Created group · San Francisco, CA</div>
+      </div>
+    </div>
+
+    <!-- Co-Admin -->
+    <div class="member-row">
+      <div class="member-avatar" style="background:var(--teal);">C</div>
+      <div class="member-info">
+        <div class="member-name">Casey Chen <span class="role-badge admin">Admin</span></div>
+        <div class="member-role">Joined 3 months ago</div>
+      </div>
+      <button class="match-request-btn">💌 Match</button>
+    </div>
+
+    <!-- Regular member -->
+    <div class="member-row">
+      <div class="member-avatar" style="background:linear-gradient(135deg,#667eea,#764ba2);">S</div>
+      <div class="member-info">
+        <div class="member-name">Sarah Williams <span class="role-badge member">Member</span></div>
+        <div class="member-role">Joined 1 month ago</div>
+      </div>
+      <button class="match-request-btn">💌 Match</button>
+    </div>
+
+    <div class="member-row">
+      <div class="member-avatar" style="background:linear-gradient(135deg,#f093fb,#f5576c);">E</div>
+      <div class="member-info">
+        <div class="member-name">Emma Johnson <span class="role-badge member">Member</span></div>
+        <div class="member-role">Joined 2 weeks ago</div>
+      </div>
+    </div>
+
+    <div class="member-row">
+      <div class="member-avatar" style="background:linear-gradient(135deg,#4facfe,#00f2fe);">D</div>
+      <div class="member-info">
+        <div class="member-name">David Park <span class="role-badge member">Member</span></div>
+        <div class="member-role">Joined 1 week ago</div>
+      </div>
+      <button class="match-request-btn">💌 Match</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SCREEN 7: Send Match Request ============ -->
+<div class="phone">
+  <div class="screen-label">07 · Match Request Flow</div>
+  <div class="phone-inner">
+    <div class="header">
+      <button class="back-btn">←</button>
+      <h1 style="font-size:18px;">💌 Send Match Request</h1>
+      <div style="width:32px;"></div>
+    </div>
+
+    <!-- Match Request Card -->
+    <div style="background:white;border-radius:20px;border:1px solid var(--border);overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,0.06);">
+      <div style="width:100%;height:200px;background:linear-gradient(135deg,#667eea,#764ba2);display:flex;align-items:center;justify-content:center;">
+        <div style="width:80px;height:80px;border-radius:50%;border:4px solid white;background:linear-gradient(135deg,#f093fb,#f5576c);display:flex;align-items:center;justify-content:center;font-size:32px;color:white;font-weight:700;">S</div>
+      </div>
+      <div style="padding:16px 20px;text-align:center;">
+        <h2 style="font-family:'Montserrat',sans-serif;font-size:20px;color:var(--navy);">Sarah Williams</h2>
+        <p style="font-size:13px;color:var(--muted);margin-top:4px;">📍 New York, NY · 28</p>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:12px 0;">
+          <span style="font-size:11px;background:var(--surface);padding:5px 12px;border-radius:14px;">Photography</span>
+          <span style="font-size:11px;background:var(--surface);padding:5px 12px;border-radius:14px;">Travel</span>
+          <span style="font-size:11px;background:var(--surface);padding:5px 12px;border-radius:14px;">Hiking</span>
+        </div>
+        <p style="font-size:12px;color:#555;line-height:1.5;">"You're in Photography Walks NYC — would you like to connect?"</p>
+      </div>
+    </div>
+
+    <!-- Message Input -->
+    <div class="form-group" style="margin-top:16px;">
+      <label class="form-label">Add a message (optional)</label>
+      <textarea class="form-textarea" placeholder="Hey! I saw you in Photography Walks NYC. Would love to connect!">Hey! I saw you in Photography Walks NYC — love your shots! Would be great to connect 😊</textarea>
+    </div>
+
+    <!-- Actions -->
+    <div style="display:flex;gap:12px;margin-top:8px;">
+      <button class="join-btn outline" style="flex:1;padding:14px;border-radius:28px;text-align:center;">Cancel</button>
+      <button class="submit-btn" style="flex:2;">💌 Send Match Request</button>
+    </div>
+
+    <!-- Success State -->
+    <div style="margin-top:20px;padding:16px;background:#e8f8f0;border-radius:16px;text-align:center;">
+      <div style="font-size:32px;margin-bottom:8px;">✅</div>
+      <div style="font-size:14px;font-weight:600;color:var(--teal);">Match request sent!</div>
+      <div style="font-size:12px;color:var(--muted);margin-top:4px;">When Sarah accepts, you'll be connected in Messages</div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SCREEN 8: Group Feed — Post Detail ============ -->
+<div class="phone">
+  <div class="screen-label">08 · Group Settings (Admin)</div>
+  <div class="phone-inner">
+    <div class="header">
+      <button class="back-btn">←</button>
+      <h1 style="font-size:18px;">Group Settings</h1>
+      <div style="width:32px;"></div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Group Name</label>
+      <input class="form-input" type="text" value="Tech Founders Club" />
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Description</label>
+      <textarea class="form-textarea">Connect with fellow founders and tech enthusiasts. Monthly meetups, guest speakers, and networking.</textarea>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Privacy</label>
+      <div class="toggle-row">
+        <div>
+          <div style="font-size:14px;font-weight:600;color:var(--navy);">Private Group</div>
+          <div style="font-size:11px;color:var(--muted);">New members require admin approval</div>
+        </div>
+        <div class="toggle on"></div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <div>
+          <div style="font-size:14px;font-weight:600;color:var(--navy);">Member Posts</div>
+          <div style="font-size:11px;color:var(--muted);">Allow members to create posts</div>
+        </div>
+        <div class="toggle on"></div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <div>
+          <div style="font-size:14px;font-weight:600;color:var(--navy);">Member Events</div>
+          <div style="font-size:11px;color:var(--muted);">Allow members to create events</div>
+        </div>
+        <div class="toggle"></div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <div>
+          <div style="font-size:14px;font-weight:600;color:var(--navy);">Match Requests</div>
+          <div style="font-size:11px;color:var(--muted);">Allow members to send match requests</div>
+        </div>
+        <div class="toggle on"></div>
+      </div>
+    </div>
+
+    <div style="margin-top:24px;padding:16px;background:#fff0f0;border-radius:16px;">
+      <div style="display:flex;align-items:center;gap:8px;">
+        <span style="color:#d32f2f;">⚠️</span>
+        <span style="font-size:13px;font-weight:600;color:#d32f2f;">Danger Zone</span>
+      </div>
+      <button style="margin-top:10px;width:100%;padding:12px;border-radius:28px;border:1px solid #d32f2f;background:white;color:#d32f2f;font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;">
+        🗑 Delete Group
+      </button>
+    </div>
+
+    <button class="submit-btn" style="margin-top:16px;">Save Changes</button>
+  </div>
+</div>
+
+</body>
+</html>
