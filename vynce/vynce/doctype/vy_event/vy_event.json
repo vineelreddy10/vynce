@@ -8,16 +8,48 @@
  "engine": "InnoDB",
  "field_order": [
   "title",
+  "subtitle",
   "description",
   "cover_image",
+  "cover_video",
+  "gallery",
+  "tags",
+  "category",
+  "event_type",
+  "visibility",
   "group",
+  "capacity_section",
+  "max_attendees",
+  "is_free",
+  "price",
+  "registration_deadline",
+  "waitlist_enabled",
+  "venue_section",
+  "venue_type",
   "location",
   "location_lat",
   "location_lng",
+  "venue_details",
+  "online_url",
+  "scheduling_section",
   "start_time",
   "end_time",
-  "category",
-  "max_attendees",
+  "is_multi_day",
+  "is_recurring",
+  "recurrence_pattern",
+  "timezone",
+  "policies_section",
+  "cancellation_policy",
+  "refund_policy",
+  "age_restriction",
+  "family_friendly",
+  "pet_friendly",
+  "accessibility_info",
+  "contact_email",
+  "promotional_section",
+  "is_featured",
+  "featured_until",
+  "promotional_video",
   "created_by",
   "is_active"
  ],
@@ -30,8 +62,13 @@
    "reqd": 1
   },
   {
+   "fieldname": "subtitle",
+   "fieldtype": "Data",
+   "label": "Subtitle"
+  },
+  {
    "fieldname": "description",
-   "fieldtype": "Text",
+   "fieldtype": "Text Editor",
    "label": "Description"
   },
   {
@@ -40,10 +77,90 @@
    "label": "Cover Image"
   },
   {
+   "fieldname": "cover_video",
+   "fieldtype": "Data",
+   "label": "Cover Video URL"
+  },
+  {
+   "fieldname": "gallery",
+   "fieldtype": "Table",
+   "label": "Gallery",
+   "options": "VY Event Media"
+  },
+  {
+   "fieldname": "tags",
+   "fieldtype": "Small Text",
+   "label": "Tags"
+  },
+  {
+   "fieldname": "category",
+   "fieldtype": "Link",
+   "label": "Category",
+   "options": "VY Interest"
+  },
+  {
+   "fieldname": "event_type",
+   "fieldtype": "Select",
+   "label": "Event Type",
+   "options": "Single\nMulti-day\nRecurring",
+   "default": "Single"
+  },
+  {
+   "fieldname": "visibility",
+   "fieldtype": "Select",
+   "label": "Visibility",
+   "options": "Public\nPrivate\nInvite Only",
+   "default": "Public"
+  },
+  {
    "fieldname": "group",
    "fieldtype": "Link",
    "label": "Group",
    "options": "VY Group"
+  },
+  {
+   "fieldname": "capacity_section",
+   "fieldtype": "Section Break",
+   "label": "Capacity & Pricing"
+  },
+  {
+   "fieldname": "max_attendees",
+   "fieldtype": "Int",
+   "label": "Max Attendees"
+  },
+  {
+   "fieldname": "is_free",
+   "fieldtype": "Check",
+   "label": "Free Event",
+   "default": "1"
+  },
+  {
+   "fieldname": "price",
+   "fieldtype": "Currency",
+   "label": "Price",
+   "depends_on": "eval:!doc.is_free"
+  },
+  {
+   "fieldname": "registration_deadline",
+   "fieldtype": "Datetime",
+   "label": "Registration Deadline"
+  },
+  {
+   "fieldname": "waitlist_enabled",
+   "fieldtype": "Check",
+   "label": "Enable Waitlist"
+  },
+  {
+   "fieldname": "venue_section",
+   "fieldtype": "Section Break",
+   "label": "Venue"
+  },
+  {
+   "fieldname": "venue_type",
+   "fieldtype": "Select",
+   "label": "Venue Type",
+   "options": "Physical\nOnline\nHybrid",
+   "default": "Physical"
   },
   {
    "fieldname": "location",
@@ -61,6 +178,22 @@
    "label": "Longitude"
   },
   {
+   "fieldname": "venue_details",
+   "fieldtype": "Small Text",
+   "label": "Venue Details"
+  },
+  {
+   "fieldname": "online_url",
+   "fieldtype": "Data",
+   "label": "Online Meeting URL",
+   "depends_on": "eval:doc.venue_type=='Online'||doc.venue_type=='Hybrid'"
+  },
+  {
+   "fieldname": "scheduling_section",
+   "fieldtype": "Section Break",
+   "label": "Scheduling"
+  },
+  {
    "fieldname": "start_time",
    "fieldtype": "Datetime",
    "in_list_view": 1,
@@ -75,15 +208,89 @@
    "reqd": 1
   },
   {
-   "fieldname": "category",
-   "fieldtype": "Link",
-   "label": "Category",
-   "options": "VY Interest"
+   "fieldname": "is_multi_day",
+   "fieldtype": "Check",
+   "label": "Multi-day Event"
   },
   {
-   "fieldname": "max_attendees",
+   "fieldname": "is_recurring",
+   "fieldtype": "Check",
+   "label": "Recurring Event"
+  },
+  {
+   "fieldname": "recurrence_pattern",
+   "fieldtype": "Select",
+   "label": "Recurrence Pattern",
+   "options": "Daily\nWeekly\nBiweekly\nMonthly\nAnnually",
+   "depends_on": "eval:doc.is_recurring"
+  },
+  {
+   "fieldname": "timezone",
+   "fieldtype": "Select",
+   "label": "Timezone",
+   "options": "UTC\nUS/Eastern\nUS/Pacific\nUS/Central\nUS/Mountain\nEurope/London\nEurope/Berlin\nEurope/Paris\nAsia/Kolkata\nAsia/Tokyo\nAsia/Shanghai\nAsia/Dubai\nAustralia/Sydney\nAmerica/Sao_Paulo",
+   "default": "UTC"
+  },
+  {
+   "fieldname": "policies_section",
+   "fieldtype": "Section Break",
+   "label": "Policies"
+  },
+  {
+   "fieldname": "cancellation_policy",
+   "fieldtype": "Small Text",
+   "label": "Cancellation Policy"
+  },
+  {
+   "fieldname": "refund_policy",
+   "fieldtype": "Small Text",
+   "label": "Refund Policy"
+  },
+  {
+   "fieldname": "age_restriction",
    "fieldtype": "Int",
-   "label": "Max Attendees"
+   "label": "Age Restriction"
+  },
+  {
+   "fieldname": "family_friendly",
+   "fieldtype": "Check",
+   "label": "Family Friendly"
+  },
+  {
+   "fieldname": "pet_friendly",
+   "fieldtype": "Check",
+   "label": "Pet Friendly"
+  },
+  {
+   "fieldname": "accessibility_info",
+   "fieldtype": "Small Text",
+   "label": "Accessibility Info"
+  },
+  {
+   "fieldname": "contact_email",
+   "fieldtype": "Data",
+   "label": "Contact Email"
+  },
+  {
+   "fieldname": "promotional_section",
+   "fieldtype": "Section Break",
+   "label": "Promotional"
+  },
+  {
+   "fieldname": "is_featured",
+   "fieldtype": "Check",
+   "label": "Featured Event"
+  },
+  {
+   "fieldname": "featured_until",
+   "fieldtype": "Datetime",
+   "label": "Featured Until",
+   "depends_on": "eval:doc.is_featured"
+  },
+  {
+   "fieldname": "promotional_video",
+   "fieldtype": "Data",
+   "label": "Promotional Video URL"
   },
   {
    "fieldname": "created_by",
@@ -100,8 +307,29 @@
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
- "links": [],
- "modified": "2026-06-20 13:29:28.312621",
+ "links": [
+  {
+   "group": "Attendees",
+   "link_doctype": "VY Event Attendee",
+   "link_fieldname": "event"
+  },
+  {
+   "group": "Bookmarks",
+   "link_doctype": "VY Event Bookmark",
+   "link_fieldname": "event"
+  },
+  {
+   "group": "Reviews",
+   "link_doctype": "VY Event Review",
+   "link_fieldname": "event"
+  },
+  {
+   "group": "Comments",
+   "link_doctype": "VY Event Comment",
+   "link_fieldname": "event"
+  }
+ ],
+ "modified": "2026-06-26 13:29:28.312621",
  "modified_by": "Administrator",
  "module": "Vynce",
  "name": "VY Event",
@@ -133,7 +361,6 @@
   }
  ],
  "row_format": "Dynamic",
- "rows_threshold_for_grid_search": 20,
  "sort_field": "creation",
  "sort_order": "DESC",
  "states": []
