@@ -79,7 +79,8 @@ def get_matrix_credentials():
                 displayname=profile.display_name,
             )
 
-            matrix_user_id = f"@{username}:vynce.app"
+            from vynce.matrix.synapse_config import SERVER_NAME
+            matrix_user_id = f"@{username}:{SERVER_NAME}"
             # Verify the response contains the user
             if result.get("name"):
                 profile.db_set("matrix_user_id", matrix_user_id, update_modified=False)
