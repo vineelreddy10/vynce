@@ -9,7 +9,7 @@ import frappe
 
 
 SYNAPSE_PORT = 8008
-SERVER_NAME = "vynce.app"
+SERVER_NAME = os.environ.get("MATRIX_SERVER_NAME", "vynce.asakta.cloud")
 
 
 def generate_secret(length=64):
