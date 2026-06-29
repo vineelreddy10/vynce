@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Vynce</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/vynce/css/vynce.css">
+</head>
+<body>
+<div id="app"></div>
+<script>
+(function() {
+  if (typeof frappe === 'undefined') {
+    var csrfMeta = document.querySelector('meta[name="csrf-token"]');
+    window.frappe = {
+      csrf_token: csrfMeta ? csrfMeta.content : '',
+      call: function(opts) {
+        var xhr = new XMLHttpRequest();
+        var method = opts.method_name || opts.method;
+        var url = '/api/method/' + method.replace(/\./g, '/');
+        var data = opts.args ? JSON.stringify(opts.args) : null;
+        xhr.open('POST', url, true);
+        xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+        xhr.setRequestHeader('X-Frappe-CSRF-Token', frappe.csrf_token);
+        xhr.withCredentials = true;
+        xhr.onload = function() {
+          try { var resp = JSON.parse(xhr.responseText); }
+          catch(e) { var resp = { message: xhr.responseText }; }
+          if (opts.callback) {
+            opts.callback(xhr.status >= 200 && xhr.status < 300 ? resp : null);
+          }
+        };
+        xhr.onerror = function() {
+          if (opts.error) opts.error(new Error('Network error'));
+          else if (opts.callback) opts.callback(null);
+        };
+        xhr.send(data);
+      },
+      ready: function(fn) {
+        if (document.readyState !== 'loading') setTimeout(fn, 0);
+        else document.addEventListener('DOMContentLoaded', fn);
+      }
+    };
+  }
+})();
+</script>
+<script src="/assets/vynce/js/vynce.js"></script>
+</body>
+</html>
