@@ -99,32 +99,37 @@ def update_profile(**kwargs):
 
 @frappe.whitelist()
 def upload_photo():
-    """Accept multipart file upload and attach to profile."""
+    """Accept multipart file upload (or image_url) and attach to profile."""
     user = frappe.session.user
     if user == "Guest":
         frappe.throw("Not logged in", frappe.AuthenticationError)
     if not frappe.db.exists("VY User Profile", {"user": user}):
         frappe.throw("Profile not found")
 
-    file = frappe.request.files.get("file")
-    if not file:
-        frappe.throw("No file provided")
-
     profile = frappe.get_doc("VY User Profile", {"user": user})
     existing = len(profile.get("photos", []))
     if existing >= 6:
         frappe.throw("Maximum 6 photos allowed")
 
-    # Save file via Frappe's upload handler
-    from frappe.handler import upload_file
-    filedoc = upload_file()
+    file = frappe.request.files.get("file")
+    file_url = ""
 
-    # Make profile photos publicly accessible (not private)
-    file_doc = frappe.get_doc("File", filedoc.get("name"))
-    if file_doc:
-        file_doc.is_private = 0
-        file_doc.save(ignore_permissions=True)
-    file_url = filedoc.get("file_url", "")
+    if file:
+        # Upload via multipart file
+        from frappe.handler import upload_file
+        filedoc = upload_file()
+        file_doc = frappe.get_doc("File", filedoc.get("name"))
+        if file_doc:
+            file_doc.is_private = 0
+            file_doc.save(ignore_permissions=True)
+        file_url = filedoc.get("file_url", "")
+    else:
+        # Fallback: accept image_url from JSON body
+        data = frappe.form_dict or frappe.local.form_dict or {}
+        image_url = data.get("image_url") or data.get("image")
+        if not image_url:
+            frappe.throw("No file or image_url provided")
+        file_url = image_url
 
     if not file_url:
         frappe.throw("Upload failed")
