@@ -105,17 +105,17 @@ def _register(email, password, display_name, birth_date, gender):
 		})
 		profile.insert(ignore_permissions=True, ignore_links=True)
 
-	# ── Create Matrix user ──────────────────────────────────
+	# ── Create Matrix user (via Admin API — avoids shared-secret HMAC issues on deployment) ──
 	try:
-		from vynce.matrix.management import create_user as create_matrix_user
+		from vynce.matrix.synapse_client import SynapseClient
 		matrix_username = email.split("@")[0]
-		matrix_result = create_matrix_user(
+		client = SynapseClient()
+		matrix_result = client.create_user(
 			username=matrix_username,
 			password=password,
 			displayname=display_name,
-			admin=False,
 		)
-		matrix_user_id = matrix_result["user_id"]
+		matrix_user_id = matrix_result.get("name", f"@{matrix_username}:vynce.asakta.cloud")
 		profile.db_set("matrix_user_id", matrix_user_id, update_modified=False)
 	except Exception:
 		frappe.logger().info(f"Matrix user creation skipped for {email} (non-fatal)")
