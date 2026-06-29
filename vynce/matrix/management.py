@@ -59,7 +59,7 @@ def _admin_register(username: str, password: str, admin: bool = False) -> dict:
     mac.update(b"\x00")
     mac.update(password.encode("utf8"))
     mac.update(b"\x00")
-    mac.update(b"admin" if admin else b"notadmin")
+    mac.update(b"true" if admin else b"false")
 
     # Register
     resp = requests.post(f"{base_url}/_synapse/admin/v1/register", json={
