@@ -29,8 +29,8 @@ app_license = "mit"
 # app_include_js = "/assets/vynce/js/vynce.js"
 
 # include js, css files in header of web template
-# web_include_css = "/assets/vynce/css/vynce.css"
-# web_include_js = "/assets/vynce/js/vynce.js"
+web_include_css = "/assets/vynce/css/vynce.css"
+web_include_js = "/assets/vynce/js/vynce.js"
 
 # include custom scss in every website theme (without file extension ".scss")
 # website_theme_scss = "vynce/public/scss/website"
@@ -57,7 +57,7 @@ app_license = "mit"
 # ----------
 
 # application home page (will override Website Settings)
-# home_page = "login"
+home_page = "index"
 
 # website user home page (by Role)
 # role_home_page = {

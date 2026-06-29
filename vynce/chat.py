@@ -1,9 +1,51 @@
-"""Chat-related API endpoints: Matrix credentials, TURN credentials for WebRTC calls."""
+"""Chat-related API endpoints: Messaging, Matrix credentials, TURN credentials."""
 
 import os
 
 import frappe
 from .matrix.synapse_config import SYNAPSE_PORT
+
+
+@frappe.whitelist()
+def send_message(match_id: str, message: str) -> dict:
+	user = frappe.session.user
+	if user == "Guest":
+		frappe.throw("Not logged in", frappe.AuthenticationError)
+
+	if not frappe.db.exists("VY Match", match_id):
+		frappe.throw("Match not found")
+
+	# Try Matrix, log as fallback
+	try:
+		profile = frappe.get_doc("VY User Profile", {"user": user})
+		if profile.matrix_user_id:
+			from vynce.matrix.synapse_client import SynapseClient
+			client = SynapseClient()
+			token_resp = client.get_login_token(profile.matrix_user_id)
+			if token_resp and token_resp.get("access_token"):
+				room_id = frappe.db.get_value("VY Match", match_id, "matrix_room_id")
+				if room_id:
+					client.send_message(room_id, token_resp["access_token"], {
+						"msgtype": "m.text",
+						"body": message,
+					})
+					frappe.db.commit()
+					return {"ok": True, "via": "matrix"}
+	except Exception as e:
+		frappe.logger().info(f"Matrix send failed, logging: {e}")
+
+	# Log message as fallback
+	from vynce.notification import send_notification
+	match_doc = frappe.get_doc("VY Match", match_id)
+	other_user = match_doc.user_2 if match_doc.user_1 == user else match_doc.user_1
+	send_notification(
+		user=other_user,
+		ntype="Message",
+		title="New Message",
+		body=message[:200],
+		data={"match_id": match_id, "from": user, "text": message},
+	)
+	return {"ok": True, "via": "notification"}
 
 
 @frappe.whitelist()
