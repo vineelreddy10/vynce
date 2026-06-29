@@ -21,11 +21,11 @@ def send_message(match_id: str, message: str) -> dict:
 		if profile.matrix_user_id:
 			from vynce.matrix.synapse_client import SynapseClient
 			client = SynapseClient()
-			token_resp = client.get_login_token(profile.matrix_user_id)
-			if token_resp and token_resp.get("access_token"):
+			access_token = client.get_login_token(profile.matrix_user_id)
+			if access_token:
 				room_id = frappe.db.get_value("VY Match", match_id, "matrix_room_id")
 				if room_id:
-					client.send_message(room_id, token_resp["access_token"], {
+					client.send_message(room_id, access_token, {
 						"msgtype": "m.text",
 						"body": message,
 					})
