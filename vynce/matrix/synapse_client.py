@@ -23,7 +23,8 @@ class SynapseError(Exception):
 def get_admin_token() -> str | None:
     """Read admin access token from Matrix Settings doctype or env."""
     try:
-        return frappe.db.get_single_value("Matrix Settings", "admin_access_token")
+        from frappe.utils.password import get_decrypted_password
+        return get_decrypted_password("Matrix Settings", "Matrix Settings", "admin_access_token")
     except Exception:
         return os.environ.get("SYNAPSE_ADMIN_TOKEN")
 
