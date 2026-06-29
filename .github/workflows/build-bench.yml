@@ -7,6 +7,7 @@ on:
       - "vynce/**"
       - "pyproject.toml"
       - "Dockerfile"
+      - ".github/workflows/build-bench.yml"
 
 permissions:
   contents: read
@@ -33,3 +34,4 @@ jobs:
           tags: ghcr.io/vineelreddy10/vynce-bench:latest
           build-args: |
             GITLAB_PAT=${{ secrets.GITLAB_PAT }}
+

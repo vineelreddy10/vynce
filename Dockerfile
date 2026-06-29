@@ -9,3 +9,4 @@ ARG DFP_BRANCH=main
 # Install custom apps
 RUN bench get-app https://github.com/vineelreddy10/vynce.git --branch ${VYNCE_BRANCH} && \
     bench get-app https://gitlab-ci-token:${GITLAB_PAT}@gitlab.asakta.com/asakta/frappe_dfp_minio.git --branch ${DFP_BRANCH}
+
