@@ -15,6 +15,7 @@ backend:
     REDIS_QUEUE: redis-queue:6379
     SYNAPSE_HOST: synapse              # REQUIRED: Matrix API host (not 127.0.0.1)
     MATRIX_SERVER_NAME: vynce.asakta.cloud  # REQUIRED: Matrix server name (not vynce.app)
+    MATRIX_SERVER_URL: https://vynce.asakta.cloud  # REQUIRED: Public Matrix URL (not http://127.0.0.1:8008)
   volumes:
     - sites:/home/frappe/frappe-bench/sites
     - assets-data:/home/frappe/frappe-bench/assets
