@@ -27,12 +27,18 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build and push
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          push: true
-          tags: ghcr.io/vineelreddy10/vynce-bench:latest
-          build-args: |
-            GITLAB_PAT=${{ secrets.GITLAB_PAT }}
+      - name: Build and push (retry up to 3x for transient errors)
+        run: |
+          for i in 1 2 3; do
+            docker build \
+              --build-arg GITLAB_PAT=${{ secrets.GITLAB_PAT }} \
+              -t ghcr.io/vineelreddy10/vynce-bench:latest .
+            if [ $? -eq 0 ]; then
+              docker push ghcr.io/vineelreddy10/vynce-bench:latest
+              echo "BUILD_OK"
+              break
+            fi
+            echo "Attempt $i failed, retrying in 30s..."
+            sleep 30
+          done
 
